@@ -1,19 +1,21 @@
 /*
  * Copyright © 2015 | Alexander01998 | All rights reserved.
- * 
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 package tk.wurst_client.hooks;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
+import java.util.jar.JarOutputStream;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -40,36 +42,56 @@ public class Prototype
 				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	private static void run() throws Throwable
 	{
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		JFileChooser filechooser = new JFileChooser(".");
-		filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		filechooser.setDialogTitle("Select input file (Jar)");
-		filechooser
-			.setFileFilter(new FileNameExtensionFilter("Jar file", "jar"));
-		filechooser.setAcceptAllFileFilterUsed(false);
-		filechooser.setApproveButtonText("Inject Hooks");
-		if(filechooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
+		JFileChooser fileChooser = new JFileChooser(".");
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileChooser.setDialogTitle("Select input file (Jar)");
+		fileChooser
+		.setFileFilter(new FileNameExtensionFilter("Jar file", "jar"));
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.setApproveButtonText("Inject Hooks");
+		if(fileChooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
 			return;
-		
-		File inputFile = filechooser.getSelectedFile();
-		InputStream input = new FileInputStream(inputFile);
-		ClassReader reader = new ClassReader(input);
-		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-		ClassHookInjector hookInjector =
-			new ClassHookInjector(Opcodes.ASM4, writer);
-		reader.accept(hookInjector, 0);
-		
+		File inputFile = fileChooser.getSelectedFile();
+		JarFile inputJar = new JarFile(inputFile);
 		File outputFile =
 			new File(inputFile.getParent(), inputFile.getName().substring(0,
 				inputFile.getName().lastIndexOf(".jar"))
 				+ "-hooked.jar");
 		outputFile.getParentFile().mkdirs();
-		DataOutputStream output =
-			new DataOutputStream(new FileOutputStream(outputFile));
-		output.write(writer.toByteArray());
+		JarInputStream input =
+			new JarInputStream(new FileInputStream(inputFile));
+		JarOutputStream output =
+			new JarOutputStream(new FileOutputStream(outputFile),
+				inputJar.getManifest());
+		inputJar.close();
+		for(JarEntry entry; (entry = input.getNextJarEntry()) != null;)
+			if(entry.isDirectory())
+			{
+				output.putNextEntry(entry);
+				output.closeEntry();
+			}else if(!entry.getName().endsWith(".class"))
+			{
+				output.putNextEntry(entry);
+				byte[] buffer = new byte[8192];
+				for(int length; (length = input.read(buffer)) != -1;)
+					output.write(buffer, 0, length);
+				output.closeEntry();
+			}else
+			{
+				output.putNextEntry(new JarEntry(entry.getName()));
+				ClassReader reader = new ClassReader(input);
+				ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+				ClassHookInjector hookInjector =
+					new ClassHookInjector(Opcodes.ASM4, writer);
+				reader.accept(hookInjector, 0);
+				output.write(writer.toByteArray());
+				output.closeEntry();
+			}
 		output.close();
+		input.close();
 	}
 }
