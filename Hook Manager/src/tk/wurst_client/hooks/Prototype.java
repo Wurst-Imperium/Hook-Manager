@@ -46,10 +46,9 @@ public class Prototype
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		JFileChooser filechooser = new JFileChooser(".");
 		filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		// TODO: Use Jar instead of class
-		filechooser.setDialogTitle("Select input file (class)");
-		filechooser.setFileFilter(new FileNameExtensionFilter("Class file",
-			"class"));
+		filechooser.setDialogTitle("Select input file (Jar)");
+		filechooser
+			.setFileFilter(new FileNameExtensionFilter("Jar file", "jar"));
 		filechooser.setAcceptAllFileFilterUsed(false);
 		filechooser.setApproveButtonText("Inject Hooks");
 		if(filechooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
@@ -65,8 +64,8 @@ public class Prototype
 		
 		File outputFile =
 			new File(inputFile.getParent(), inputFile.getName().substring(0,
-				inputFile.getName().lastIndexOf(".class"))
-				+ "-hooked.class");
+				inputFile.getName().lastIndexOf(".jar"))
+				+ "-hooked.jar");
 		outputFile.getParentFile().mkdirs();
 		DataOutputStream output =
 			new DataOutputStream(new FileOutputStream(outputFile));
