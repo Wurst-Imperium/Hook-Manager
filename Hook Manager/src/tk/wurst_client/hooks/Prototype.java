@@ -33,6 +33,7 @@ public class Prototype
 			run();
 		}catch(Throwable e)
 		{
+			e.printStackTrace();
 			StringWriter traceWriter = new StringWriter();
 			e.printStackTrace(new PrintWriter(traceWriter));
 			JOptionPane.showMessageDialog(null, traceWriter.toString(),
