@@ -91,7 +91,7 @@ public class Main
 					try
 					{
 						switch(JOptionPane.showOptionDialog(null,
-							"An error occurred while updating Wurst.", "Error",
+							"An error occurred while updating.", "Error",
 							JOptionPane.DEFAULT_OPTION,
 							JOptionPane.ERROR_MESSAGE, null, new String[]{
 								"Report on GitHub", "Report via e-mail",
@@ -104,7 +104,7 @@ public class Main
 										new URI(
 											"https://github.com/Wurst-Imperium/Hook-Manager/issues/new?title="
 												+ URLEncoder.encode(
-													"Wurst updater - Error report: "
+													"HookManager updater - Error report: "
 														+ e.getMessage(),
 													"UTF-8")
 												+ "&body="
@@ -124,7 +124,7 @@ public class Main
 											"mailto:contact.wurstimperium@gmail.com?subject="
 												+ URLEncoder
 													.encode(
-														"Wurst updater - Error report",
+														"HookManager updater - Error report",
 														"UTF-8")
 												+ "&body="
 												+ URLEncoder
@@ -210,29 +210,6 @@ public class Main
 	{
 		progress.updateProgress("Extracting update...", "");
 		System.out.println("Extracting update...");
-		/*
-		 * ZipInputStream input = new ZipInputStream(new FileInputStream(tmp));
-		 * byte[] buffer = new byte[8192];
-		 * for(ZipEntry entry; (entry = input.getNextEntry()) != null;)
-		 * {
-		 * if(entry.getName().equals("Wurst/"))
-		 * continue;
-		 * File file;
-		 * if(entry.getName().equals("Wurst/Wurst.jar"))
-		 * file = newJar;
-		 * else if(entry.getName().equals("Wurst/Wurst.json"))
-		 * file = newWurstJSON;
-		 * else
-		 * file = new File(currentDirectory, entry.getName());
-		 * FileOutputStream output = new FileOutputStream(file);
-		 * for(int length; (length = input.read(buffer)) != -1;)
-		 * {
-		 * output.write(buffer, 0, length);
-		 * }
-		 * output.close();
-		 * }
-		 * input.close();
-		 */
 		if(!tmp.exists())
 			tmp.mkdir();
 		ZipInputStream input = new ZipInputStream(new FileInputStream(zip));
