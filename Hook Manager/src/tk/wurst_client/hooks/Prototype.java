@@ -26,6 +26,8 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
+import tk.wurst_client.update.Updater;
+
 public class Prototype
 {
 	public static void main(String[] args)
@@ -46,6 +48,10 @@ public class Prototype
 	private static void run() throws Throwable
 	{
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		Updater updater = new Updater();
+		updater.checkForUpdate();
+		if(updater.isOutdated())
+			updater.update();
 		JFileChooser fileChooser = new JFileChooser(".");
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setDialogTitle("Select input file (Jar)");

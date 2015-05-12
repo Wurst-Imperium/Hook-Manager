@@ -17,6 +17,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import tk.wurst_client.update.Updater;
+
 public class MainFrame extends JFrame
 {
 
@@ -35,6 +37,10 @@ public class MainFrame extends JFrame
 				try
 				{
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					Updater updater = new Updater();
+					updater.checkForUpdate();
+					if(updater.isOutdated())
+						updater.update();
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
 				}catch(Exception e)
