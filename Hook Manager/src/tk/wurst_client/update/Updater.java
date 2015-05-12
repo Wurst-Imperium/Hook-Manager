@@ -23,11 +23,8 @@ import com.google.gson.JsonParser;
 
 public class Updater
 {
-	private boolean outdated;
-	private JsonArray json;
-	private JsonObject latestRelease;
-	
 	public static final String CURRENT_VERSION = "0.1";
+	
 	private int currentMajor;
 	private int currentMinor;
 	private int currentPatch;
@@ -39,6 +36,9 @@ public class Updater
 	private int latestPatch;
 	private int latestPreRelease;
 	
+	private boolean outdated;
+	private JsonArray json;
+	
 	public void checkForUpdate()
 	{
 		try
@@ -46,43 +46,38 @@ public class Updater
 			outdated = false;
 			try
 			{
-				currentMajor =
-					Integer.parseInt(CURRENT_VERSION.split("\\.")[0]);
+				String[] parts = CURRENT_VERSION.split("\\.");
+				currentMajor = Integer.parseInt(parts[0]);
 				if(CURRENT_VERSION.contains("pre"))
 					currentPreRelease =
 						Integer.parseInt(CURRENT_VERSION
 							.substring(CURRENT_VERSION.indexOf("pre") + 3));
 				else
 					currentPreRelease = 0;
-				if(CURRENT_VERSION.split("\\.").length > 2)
+				if(parts.length > 2)
 					if(currentPreRelease == 0)
-						currentPatch =
-							Integer.parseInt(CURRENT_VERSION.split("\\.")[2]);
+						currentPatch = Integer.parseInt(parts[2]);
 					else
 						currentPatch =
-							Integer.parseInt(CURRENT_VERSION.split("\\.")[2]
-								.substring(0, CURRENT_VERSION.split("\\.")[2]
-									.indexOf("pre")));
+							Integer.parseInt(parts[2].substring(0,
+								parts[2].indexOf("pre")));
 				else
 					currentPatch = 0;
 				if(currentPreRelease == 0 || currentPatch > 0)
-					currentMinor =
-						Integer.parseInt(CURRENT_VERSION.split("\\.")[1]);
+					currentMinor = Integer.parseInt(parts[1]);
 				else
 					currentMinor =
-						Integer
-							.parseInt(CURRENT_VERSION.split("\\.")[1]
-								.substring(0, CURRENT_VERSION.split("\\.")[1]
-									.indexOf("pre")));
+						Integer.parseInt(parts[1].substring(0,
+							parts[1].indexOf("pre")));
 			}catch(Exception e)
 			{
-				System.err.println("Current version (\"" + CURRENT_VERSION
-					+ "\") doesn't follow the semver.org syntax!");
+				System.err.println("Current version \"" + CURRENT_VERSION
+					+ "\" doesn't follow the semver.org syntax!");
 				e.printStackTrace();
 			}
 			HttpsURLConnection connection =
 				(HttpsURLConnection)new URL(
-					"https://api.github.com/repos/Wurst-Imperium/Wurst-Client/releases")
+					"https://api.github.com/repos/Wurst-Imperium/Hook-Manager/releases")
 					.openConnection();
 			BufferedReader load =
 				new BufferedReader(new InputStreamReader(
@@ -92,7 +87,7 @@ public class Updater
 				content += "\n" + line;
 			load.close();
 			json = new JsonParser().parse(content).getAsJsonArray();
-			latestRelease = new JsonObject();
+			JsonObject latestRelease = new JsonObject();
 			for(JsonElement release : json)
 				if(!release.getAsJsonObject().get("prerelease").getAsBoolean()
 					|| currentPreRelease > 0)
@@ -100,36 +95,33 @@ public class Updater
 					latestRelease = release.getAsJsonObject();
 					break;
 				}
-			latestVersion =
-				latestRelease.get("tag_name").getAsString().substring(1);
 			try
 			{
-				latestMajor = Integer.parseInt(latestVersion.split("\\.")[0]);
+				latestVersion =
+					latestRelease.get("tag_name").getAsString().substring(1);
+				String[] parts = latestVersion.split("\\.");
+				latestMajor = Integer.parseInt(parts[0]);
 				if(latestVersion.contains("pre"))
 					latestPreRelease =
 						Integer.parseInt(latestVersion.substring(latestVersion
 							.indexOf("pre") + 3));
 				else
 					latestPreRelease = 0;
-				if(latestVersion.split("\\.").length > 2)
+				if(parts.length > 2)
 					if(latestPreRelease == 0)
-						latestPatch =
-							Integer.parseInt(latestVersion.split("\\.")[2]);
+						latestPatch = Integer.parseInt(parts[2]);
 					else
 						latestPatch =
-							Integer.parseInt(latestVersion.split("\\.")[2]
-								.substring(0, latestVersion.split("\\.")[2]
-									.indexOf("pre")));
+							Integer.parseInt(parts[2].substring(0,
+								parts[2].indexOf("pre")));
 				else
 					latestPatch = 0;
 				if(latestPreRelease == 0 || latestPatch > 0)
-					latestMinor =
-						Integer.parseInt(latestVersion.split("\\.")[1]);
+					latestMinor = Integer.parseInt(parts[1]);
 				else
 					latestMinor =
-						Integer.parseInt(latestVersion.split("\\.")[1]
-							.substring(0,
-								latestVersion.split("\\.")[1].indexOf("pre")));
+						Integer.parseInt(parts[1].substring(0,
+							parts[1].indexOf("pre")));
 			}catch(Exception e)
 			{
 				System.err.println("Latest version (\"" + latestVersion
@@ -184,9 +176,10 @@ public class Updater
 			{
 				try
 				{
-					if((char)getClass().getClassLoader()
-						.getResourceAsStream("assets/minecraft/wurst/updater")
-						.read() == "0".toCharArray()[0])
+					if(!new JsonParser().parse(
+						new InputStreamReader(getClass().getClassLoader()
+							.getResourceAsStream("auto-updater")))
+						.getAsBoolean())
 						return;
 					File updater =
 						new File(Updater.class.getProtectionDomain()
@@ -198,7 +191,7 @@ public class Updater
 						new File(updater.getAbsolutePath().replace("%20", " "));
 					InputStream input =
 						getClass().getClassLoader().getResourceAsStream(
-							"assets/minecraft/wurst/Wurst-updater.jar");
+							"Updater.jar");
 					FileOutputStream output = new FileOutputStream(updater);
 					byte[] buffer = new byte[8192];
 					for(int length; (length = input.read(buffer)) != -1;)
@@ -216,7 +209,7 @@ public class Updater
 								.parse(
 									new InputStreamReader(
 										new URL(
-											"https://api.github.com/repos/Wurst-Imperium/Wurst-Client/releases/latest")
+											"https://api.github.com/repos/Wurst-Imperium/Hook-Manager/releases/latest")
 											.openStream())).getAsJsonObject()
 								.get("id").getAsString();
 					ProcessBuilder pb =
@@ -244,11 +237,6 @@ public class Updater
 	public boolean isOutdated()
 	{
 		return outdated;
-	}
-	
-	public String getCurrentVersion()
-	{
-		return CURRENT_VERSION;
 	}
 	
 	public String getLatestVersion()

@@ -20,6 +20,8 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -33,12 +35,9 @@ import com.google.gson.JsonParser;
 
 public class Main
 {
-	public static File currentDirectory;
-	public static File oldJar;
-	public static File newJar;
-	public static File wurstJSON;
-	public static File newWurstJSON;
-	public static File tmp;
+	private static File currentDirectory;
+	private static File zip;
+	private static File tmp;
 	private static ProgressDialog progress;
 	
 	public static void main(final String[] args)
@@ -63,9 +62,8 @@ public class Main
 					{
 						currentDirectory =
 							new File(args[2].replace("%20", " "));
-						oldJar = new File(currentDirectory, "Wurst.jar");
-						newJar = new File(currentDirectory, "Wurst-update.jar");
-						tmp = new File(currentDirectory, "Wurst-update.tmp");
+						zip = new File(currentDirectory, "update.zip");
+						tmp = new File(currentDirectory, "tmp");
 						progress = new ProgressDialog();
 						Thread thread = new Thread(new Runnable()
 						{
@@ -104,7 +102,7 @@ public class Main
 									.getDesktop()
 									.browse(
 										new URI(
-											"https://github.com/Wurst-Imperium/Wurst-Client/issues/new?title="
+											"https://github.com/Wurst-Imperium/Hook-Manager/issues/new?title="
 												+ URLEncoder.encode(
 													"Wurst updater - Error report: "
 														+ e.getMessage(),
@@ -160,7 +158,7 @@ public class Main
 								.getDesktop()
 								.browse(
 									new URI(
-										"https://github.com/Wurst-Imperium/Wurst-Client/releases/latest"));
+										"https://github.com/Wurst-Imperium/Hook-Manager/releases/latest"));
 					}catch(Exception e1)
 					{
 						e1.printStackTrace();
@@ -177,14 +175,14 @@ public class Main
 		JsonArray json =
 			new JsonParser().parse(
 				new InputStreamReader(new URL(
-					"https://api.github.com/repos/Wurst-Imperium/Wurst-Client/releases/"
+					"https://api.github.com/repos/Wurst-Imperium/Hook-Manager/releases/"
 						+ id + "/assets").openStream())).getAsJsonArray();
 		URL downloadUrl =
 			new URL(json.get(0).getAsJsonObject().get("browser_download_url")
 				.getAsString());
 		long bytesTotal = downloadUrl.openConnection().getContentLengthLong();
 		InputStream input = downloadUrl.openStream();
-		FileOutputStream output = new FileOutputStream(tmp);
+		FileOutputStream output = new FileOutputStream(zip);
 		byte[] buffer = new byte[8192];
 		long bytesDownloaded = 0;
 		for(int length; (length = input.read(buffer)) != -1;)
@@ -193,13 +191,11 @@ public class Main
 			if(bytesDownloaded > 0)
 			{
 				String percent =
-					((float)(short)((float)bytesDownloaded / (float)bytesTotal * 1000F) / 10F)
-						+ "%";
+					(short)((float)bytesDownloaded / (float)bytesTotal * 1000F)
+						/ 10F + "%";
 				String data =
-					((float)(int)((float)bytesDownloaded * 1000F / 1048576F) / 1000F)
-						+ " / "
-						+ ((float)(int)((float)bytesTotal * 1000F / 1048576F) / 1000F)
-						+ " Mb";
+					(int)(bytesDownloaded * 1000F / 1048576F) / 1000F + " / "
+						+ (int)(bytesTotal * 1000F / 1048576F) / 1000F + " Mb";
 				progress.updateProgress("Downloading Update: " + percent, data);
 				System.out.println("Downloading Update: " + percent + " ("
 					+ data + ")");
@@ -214,41 +210,63 @@ public class Main
 	{
 		progress.updateProgress("Extracting update...", "");
 		System.out.println("Extracting update...");
-		ZipInputStream input = new ZipInputStream(new FileInputStream(tmp));
-		byte[] buffer = new byte[8192];
+		/*
+		 * ZipInputStream input = new ZipInputStream(new FileInputStream(tmp));
+		 * byte[] buffer = new byte[8192];
+		 * for(ZipEntry entry; (entry = input.getNextEntry()) != null;)
+		 * {
+		 * if(entry.getName().equals("Wurst/"))
+		 * continue;
+		 * File file;
+		 * if(entry.getName().equals("Wurst/Wurst.jar"))
+		 * file = newJar;
+		 * else if(entry.getName().equals("Wurst/Wurst.json"))
+		 * file = newWurstJSON;
+		 * else
+		 * file = new File(currentDirectory, entry.getName());
+		 * FileOutputStream output = new FileOutputStream(file);
+		 * for(int length; (length = input.read(buffer)) != -1;)
+		 * {
+		 * output.write(buffer, 0, length);
+		 * }
+		 * output.close();
+		 * }
+		 * input.close();
+		 */
+		if(!tmp.exists())
+			tmp.mkdir();
+		ZipInputStream input = new ZipInputStream(new FileInputStream(zip));
 		for(ZipEntry entry; (entry = input.getNextEntry()) != null;)
 		{
-			if(entry.getName().equals("Wurst/"))
-				continue;
-			File file;
-			if(entry.getName().equals("Wurst/Wurst.jar"))
-				file = newJar;
-			else if(entry.getName().equals("Wurst/Wurst.json"))
-				file = newWurstJSON;
-			else
-				file = new File(currentDirectory, entry.getName());
-			FileOutputStream output = new FileOutputStream(file);
+			File newFile = new File(tmp, entry.getName());
+			newFile.getParentFile().mkdirs();
+			FileOutputStream output = new FileOutputStream(newFile);
+			byte[] buffer = new byte[8192];
 			for(int length; (length = input.read(buffer)) != -1;)
-			{
 				output.write(buffer, 0, length);
-			}
 			output.close();
+			entry = input.getNextEntry();
 		}
 		input.close();
 	}
 	
 	private static void install() throws Exception
 	{
-		while(!(oldJar.delete() || !oldJar.exists())
-			|| !newJar.renameTo(oldJar)
-			|| !(wurstJSON.delete() || !wurstJSON.exists())
-			|| !newWurstJSON.renameTo(wurstJSON))
+		while(true)
 		{
 			progress.updateProgress("Update ready",
-				"Restart Minecraft to install it.");
+				"Restart HookManager to install it.");
 			System.out
-				.println("Update ready - Restart Minecraft to install it.");
-			Thread.sleep(500);
+				.println("Update ready - Restart HookManager to install it.");
+			try
+			{
+				Files.copy(tmp.toPath(), currentDirectory.toPath(),
+					StandardCopyOption.REPLACE_EXISTING);
+				break;
+			}catch(Exception e)
+			{
+				Thread.sleep(500);
+			}
 		}
 		System.out.println("Done.");
 		progress.dispose();

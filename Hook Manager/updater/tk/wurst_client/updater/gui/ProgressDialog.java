@@ -17,6 +17,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 
 public class ProgressDialog extends JDialog
 {
@@ -43,7 +44,7 @@ public class ProgressDialog extends JDialog
 	public ProgressDialog()
 	{
 		setUndecorated(true);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setAlwaysOnTop(true);
 		setModal(true);
 		setResizable(false);
