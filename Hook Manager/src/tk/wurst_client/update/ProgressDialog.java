@@ -5,7 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package tk.wurst_client.updater.gui;
+package tk.wurst_client.update;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -46,7 +46,6 @@ public class ProgressDialog extends JDialog
 		setUndecorated(true);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setAlwaysOnTop(true);
-		setModal(true);
 		setResizable(false);
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds(screen.width - 450, 0, 450, 200);

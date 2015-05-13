@@ -38,6 +38,10 @@ public class Updater
 	
 	private boolean outdated;
 	private JsonArray json;
+	private File currentDirectory;
+	
+	private static File update;
+	private static ProgressDialog progress;
 	
 	public void checkForUpdate()
 	{
@@ -176,28 +180,21 @@ public class Updater
 			{
 				try
 				{
-					if(!new JsonParser().parse(
-						new InputStreamReader(getClass().getClassLoader()
-							.getResourceAsStream("auto-updater")))
-						.getAsBoolean())
-						return;
-					File updater =
+					try
+					{
+						if(!new JsonParser().parse(
+							new InputStreamReader(getClass().getClassLoader()
+								.getResourceAsStream("auto-updater")))
+							.getAsBoolean())
+							return;
+					}catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+					currentDirectory =
 						new File(Updater.class.getProtectionDomain()
-							.getCodeSource().getLocation().getPath());
-					if(!updater.isDirectory())
-						updater = updater.getParentFile();
-					updater = new File(updater, "Wurst-updater.jar");
-					updater =
-						new File(updater.getAbsolutePath().replace("%20", " "));
-					InputStream input =
-						getClass().getClassLoader().getResourceAsStream(
-							"Updater.jar");
-					FileOutputStream output = new FileOutputStream(updater);
-					byte[] buffer = new byte[8192];
-					for(int length; (length = input.read(buffer)) != -1;)
-						output.write(buffer, 0, length);
-					input.close();
-					output.close();
+							.getCodeSource().getLocation().getPath()
+							.replace("%20", " ")).getParentFile();
 					String id;
 					if(currentPreRelease > 0)
 						id =
@@ -212,19 +209,19 @@ public class Updater
 											"https://api.github.com/repos/Wurst-Imperium/Hook-Manager/releases/latest")
 											.openStream())).getAsJsonObject()
 								.get("id").getAsString();
-					ProcessBuilder pb =
-						new ProcessBuilder("cmd.exe", "/c", "java", "-jar",
-							updater.getAbsolutePath(), "update", id, updater
-								.getParentFile().getAbsolutePath()
-								.replace(" ", "%20"));
-					pb.redirectErrorStream(true);
-					Process p = pb.start();
-					BufferedReader pInput =
-						new BufferedReader(new InputStreamReader(p
-							.getInputStream()));
-					for(String message; (message = pInput.readLine()) != null;)
-						System.out.println(message);
-					pInput.close();
+					progress = new ProgressDialog();
+					Thread thread = new Thread(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							// Thread needed because setVisible() freezes
+							progress.setVisible(true);
+						}
+					});
+					thread.start();
+					download(id);
+					progress.updateProgress("Update ready", "");
 				}catch(Exception e)
 				{
 					System.err.println("Could not update!");
@@ -242,5 +239,44 @@ public class Updater
 	public String getLatestVersion()
 	{
 		return latestVersion;
+	}
+	
+	private void download(String id) throws Exception
+	{
+		JsonArray json =
+			new JsonParser().parse(
+				new InputStreamReader(new URL(
+					"https://api.github.com/repos/Wurst-Imperium/Hook-Manager/releases/"
+						+ id + "/assets").openStream())).getAsJsonArray();
+		update =
+			new File(currentDirectory, json.get(0).getAsJsonObject()
+				.get("name").getAsString());
+		URL downloadUrl =
+			new URL(json.get(0).getAsJsonObject().get("browser_download_url")
+				.getAsString());
+		long bytesTotal = downloadUrl.openConnection().getContentLengthLong();
+		InputStream input = downloadUrl.openStream();
+		FileOutputStream output = new FileOutputStream(update);
+		byte[] buffer = new byte[8192];
+		long bytesDownloaded = 0;
+		for(int length; (length = input.read(buffer)) != -1;)
+		{
+			bytesDownloaded += length;
+			if(bytesDownloaded > 0)
+			{
+				String percent =
+					(short)((float)bytesDownloaded / (float)bytesTotal * 1000F)
+						/ 10F + "%";
+				String data =
+					(int)(bytesDownloaded * 1000F / 1048576F) / 1000F + " / "
+						+ (int)(bytesTotal * 1000F / 1048576F) / 1000F + " Mb";
+				progress.updateProgress("Downloading Update: " + percent, data);
+				System.out.println("Downloading Update: " + percent + " ("
+					+ data + ")");
+			}
+			output.write(buffer, 0, length);
+		}
+		input.close();
+		output.close();
 	}
 }

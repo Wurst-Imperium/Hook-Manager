@@ -1,6 +1,6 @@
 /*
  * Copyright © 2015 | Alexander01998 | All rights reserved.
- *
+ * 
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -35,6 +35,8 @@ public class Prototype
 		try
 		{
 			run();
+			System.exit(0);
+			// Forces updater window to close
 		}catch(Throwable e)
 		{
 			e.printStackTrace();
@@ -44,7 +46,7 @@ public class Prototype
 				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-
+	
 	private static void run() throws Throwable
 	{
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -56,7 +58,7 @@ public class Prototype
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setDialogTitle("Select input file (Jar)");
 		fileChooser
-		.setFileFilter(new FileNameExtensionFilter("Jar file", "jar"));
+			.setFileFilter(new FileNameExtensionFilter("Jar file", "jar"));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.setApproveButtonText("Inject Hooks");
 		if(fileChooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
