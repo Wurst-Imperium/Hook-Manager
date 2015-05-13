@@ -180,17 +180,6 @@ public class Updater
 			{
 				try
 				{
-					try
-					{
-						if(!new JsonParser().parse(
-							new InputStreamReader(getClass().getClassLoader()
-								.getResourceAsStream("auto-updater")))
-							.getAsBoolean())
-							return;
-					}catch(Exception e)
-					{
-						e.printStackTrace();
-					}
 					currentDirectory =
 						new File(Updater.class.getProtectionDomain()
 							.getCodeSource().getLocation().getPath()
