@@ -11,11 +11,14 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import tk.wurst_client.update.Updater;
 
 public class MainFrame extends JFrame
 {
@@ -35,6 +38,16 @@ public class MainFrame extends JFrame
 				try
 				{
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					Updater updater = new Updater();
+					updater.checkForUpdate();
+					if(updater.isOutdated())
+					{
+						if(JOptionPane.showConfirmDialog(null,
+							"Version " + updater.getLatestVersion() + " is available.\n"
+								+ "Would you like to update?", "Update Available",
+							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+							updater.update();
+					}
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
 				}catch(Exception e)

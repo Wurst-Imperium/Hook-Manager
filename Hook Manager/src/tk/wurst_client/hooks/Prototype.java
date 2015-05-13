@@ -1,6 +1,6 @@
 /*
  * Copyright © 2015 | Alexander01998 | All rights reserved.
- *
+ * 
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,6 +26,8 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
+import tk.wurst_client.update.Updater;
+
 public class Prototype
 {
 	public static void main(String[] args)
@@ -33,6 +35,8 @@ public class Prototype
 		try
 		{
 			run();
+			System.exit(0);
+			// Forces updater window to close
 		}catch(Throwable e)
 		{
 			e.printStackTrace();
@@ -42,15 +46,25 @@ public class Prototype
 				"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-
+	
 	private static void run() throws Throwable
 	{
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		Updater updater = new Updater();
+		updater.checkForUpdate();
+		if(updater.isOutdated())
+		{
+			if(JOptionPane.showConfirmDialog(null,
+				"Version " + updater.getLatestVersion() + " is available.\n"
+					+ "Would you like to update?", "Update Available",
+				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+				updater.update();
+		}
 		JFileChooser fileChooser = new JFileChooser(".");
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setDialogTitle("Select input file (Jar)");
 		fileChooser
-		.setFileFilter(new FileNameExtensionFilter("Jar file", "jar"));
+			.setFileFilter(new FileNameExtensionFilter("Jar file", "jar"));
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.setApproveButtonText("Inject Hooks");
 		if(fileChooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
