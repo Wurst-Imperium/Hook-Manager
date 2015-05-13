@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -40,7 +41,13 @@ public class MainFrame extends JFrame
 					Updater updater = new Updater();
 					updater.checkForUpdate();
 					if(updater.isOutdated())
-						updater.update();
+					{
+						if(JOptionPane.showConfirmDialog(null,
+							"Version " + updater.getLatestVersion() + " is available.\n"
+								+ "Would you like to update?", "Update Available",
+							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+							updater.update();
+					}
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
 				}catch(Exception e)

@@ -53,7 +53,13 @@ public class Prototype
 		Updater updater = new Updater();
 		updater.checkForUpdate();
 		if(updater.isOutdated())
-			updater.update();
+		{
+			if(JOptionPane.showConfirmDialog(null,
+				"Version " + updater.getLatestVersion() + " is available.\n"
+					+ "Would you like to update?", "Update Available",
+				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+				updater.update();
+		}
 		JFileChooser fileChooser = new JFileChooser(".");
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setDialogTitle("Select input file (Jar)");
