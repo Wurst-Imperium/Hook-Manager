@@ -12,12 +12,16 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
+import tk.wurst_client.hooks.util.Constants;
+import tk.wurst_client.hooks.util.Util;
 import tk.wurst_client.update.Updater;
 
 public class MainFrame extends JFrame
@@ -99,21 +103,61 @@ public class MainFrame extends JFrame
 		menuBar.add(mnHelp);
 		
 		JMenuItem mntmHookManagerWiki = new JMenuItem("Hook Manager Wiki");
+		mntmHookManagerWiki.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Util.openInBrowser(Constants.URLs.WIKI);
+			}
+		});
 		mnHelp.add(mntmHookManagerWiki);
 		
 		JMenuItem mntmQuestionsAnswers = new JMenuItem("Questions & Answers");
+		mntmQuestionsAnswers.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Util.openInBrowser(Constants.URLs.QUESTIONS);
+			}
+		});
 		mnHelp.add(mntmQuestionsAnswers);
 		
 		JSeparator separator_2 = new JSeparator();
 		mnHelp.add(separator_2);
 		
 		JMenuItem mntmContribute = new JMenuItem("Contribute <3");
+		mntmContribute.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Util.openInBrowser(Constants.URLs.CONTRIBUTE);
+			}
+		});
 		mnHelp.add(mntmContribute);
 		
 		JMenuItem mntmReportBugs = new JMenuItem("Report Bugs");
+		mntmReportBugs.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Util.openInBrowser(Constants.URLs.BUGS);
+			}
+		});
 		mnHelp.add(mntmReportBugs);
 		
 		JMenuItem mntmSuggestFeatures = new JMenuItem("Suggest Features");
+		mntmSuggestFeatures.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Util.openInBrowser(Constants.URLs.SUGGESTIONS);
+			}
+		});
 		mnHelp.add(mntmSuggestFeatures);
 		
 		JSeparator separator_3 = new JSeparator();
@@ -123,10 +167,26 @@ public class MainFrame extends JFrame
 		mnHelp.add(mntmAboutHookManager);
 		
 		JMenuItem mntmOfficialWebsite = new JMenuItem("Official Website");
+		mntmOfficialWebsite.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Util.openInBrowser(Constants.URLs.WEBSITE);
+			}
+		});
 		mnHelp.add(mntmOfficialWebsite);
 		
 		JMenuItem mntmOfficialGithubPage =
 			new JMenuItem("Official GitHub Page");
+		mntmOfficialGithubPage.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Util.openInBrowser(Constants.URLs.GITHUB_PAGE);
+			}
+		});
 		mnHelp.add(mntmOfficialGithubPage);
 		
 		JMenuItem mntmViewLicense = new JMenuItem("View License");
