@@ -21,6 +21,8 @@ import javafx.scene.web.WebView;
 
 import javax.swing.JPanel;
 
+import netscape.javascript.JSObject;
+
 @SuppressWarnings("restriction")
 public class HTMLPanel extends JPanel
 {
@@ -50,7 +52,8 @@ public class HTMLPanel extends JPanel
 	{
 		try
 		{
-			InputStream input = getClass().getClassLoader().getResourceAsStream(resource);
+			InputStream input =
+				getClass().getClassLoader().getResourceAsStream(resource);
 			final char[] buffer = new char[8192];
 			StringBuilder output = new StringBuilder();
 			Reader reader = new InputStreamReader(input);
@@ -63,7 +66,7 @@ public class HTMLPanel extends JPanel
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void setHTML(String html)
 	{
 		Platform.runLater(new Runnable()
@@ -74,5 +77,15 @@ public class HTMLPanel extends JPanel
 				engine.loadContent(html);
 			}
 		});
+	}
+	
+	public <T> void setBridge(T bridge)
+	{
+		((JSObject)engine.executeScript("window")).setMember("java", bridge);
+	}
+	
+	public void executeScript(String script)
+	{
+		engine.executeScript(script);
 	}
 }
