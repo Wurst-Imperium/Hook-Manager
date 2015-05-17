@@ -198,6 +198,13 @@ public class MainFrame extends JFrame
 		mnHelp.add(mntmOfficialGithubPage);
 		
 		JMenuItem mntmViewLicense = new JMenuItem("View License");
+		mntmViewLicense.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				new LicenseDialog(MainFrame.this).setVisible(true);
+			}
+		});
 		mnHelp.add(mntmViewLicense);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
