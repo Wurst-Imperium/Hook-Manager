@@ -97,6 +97,14 @@ public class MainFrame extends JFrame
 		mnFile.add(separator);
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				System.exit(0);
+			}
+		});
 		mnFile.add(mntmExit);
 		
 		JMenu mnHelp = new JMenu("Help");
@@ -198,7 +206,8 @@ public class MainFrame extends JFrame
 		mnHelp.add(mntmOfficialGithubPage);
 		
 		JMenuItem mntmViewLicense = new JMenuItem("View License");
-		mntmViewLicense.addActionListener(new ActionListener() {
+		mntmViewLicense.addActionListener(new ActionListener()
+		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
