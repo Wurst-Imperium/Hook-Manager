@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    html {
+      font-family: "Verdana";
+    }
+    
+    h1 {
+      text-align: center;
+      border-bottom: 0.1em solid #000;
+    }
+    
+    #close {
+      position: fixed;
+      bottom: 1em;
+      width: 100%;
+      text-align: center;
+    }
+    
+    #close button {
+      padding: 0.25em 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>About Hook Manager</h1>
+  <p id="version">
+  Hook Manager (unknown version)
+  <script>
+  	document.getElementById("version").innerHTML = "HookManager version " + window.java.getVersion();
+  </script>
+  </p>
+  <p>
+    Copyright &#169; 2015 | Alexander01998 | All rights reserved.
+  </p>
+  <p id="website">
+    <script>
+      document.getElementById("website").innerHTML = '<a href="#" onclick="java.openWebsite()">' + java.getWebsite() + '</a>';
+    </script>
+  </p>
+  <div id="close">
+    <button onclick="java.exit()">OK</button>
+  </div>
+</body>
+</html>

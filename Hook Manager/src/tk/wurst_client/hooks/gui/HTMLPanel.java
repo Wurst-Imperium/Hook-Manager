@@ -81,7 +81,14 @@ public class HTMLPanel extends JPanel
 	
 	public <T> void setBridge(T bridge)
 	{
-		((JSObject)engine.executeScript("window")).setMember("java", bridge);
+		Platform.runLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				((JSObject)engine.executeScript("window")).setMember("java", bridge);
+			}
+		});
 	}
 	
 	public void executeScript(String script)

@@ -164,6 +164,14 @@ public class MainFrame extends JFrame
 		mnHelp.add(separator_3);
 		
 		JMenuItem mntmAboutHookManager = new JMenuItem("About Hook Manager");
+		mntmAboutHookManager.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				new AboutDialog(MainFrame.this).setVisible(true);
+			}
+		});
 		mnHelp.add(mntmAboutHookManager);
 		
 		JMenuItem mntmOfficialWebsite = new JMenuItem("Official Website");
