@@ -1,0 +1,24 @@
+exclude:
+- README.md
+
+gems:
+  - jekyll-sitemap
+  - jemoji
+
+timezone: Europe/Berlin
+
+title: Hook Manager
+
+defaults:
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
