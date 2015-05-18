@@ -23,7 +23,6 @@ import javax.swing.JPanel;
 
 import netscape.javascript.JSObject;
 
-@SuppressWarnings("restriction")
 public class HTMLPanel extends JPanel
 {
 	private JFXPanel jfxPanel = new JFXPanel();
