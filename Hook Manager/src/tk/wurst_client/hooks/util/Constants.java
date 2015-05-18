@@ -9,6 +9,8 @@ package tk.wurst_client.hooks.util;
 
 public final class Constants
 {
+	public static final String VERSION = "0.1";
+	
 	public static final class URLs
 	{
 		public static final String GITHUB_PAGE =

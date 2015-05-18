@@ -11,7 +11,6 @@ import java.awt.Component;
 
 import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
-import tk.wurst_client.update.Updater;
 
 public class AboutDialog extends HTMLDialog
 {
@@ -27,7 +26,7 @@ public class AboutDialog extends HTMLDialog
 	{
 		public String getVersion()
 		{
-			return Updater.CURRENT_VERSION;
+			return Constants.VERSION;
 		}
 		
 		public String getWebsite()

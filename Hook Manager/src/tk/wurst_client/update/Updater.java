@@ -16,6 +16,8 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import tk.wurst_client.hooks.util.Constants;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,7 +25,6 @@ import com.google.gson.JsonParser;
 
 public class Updater
 {
-	public static final String CURRENT_VERSION = "0.1";
 	
 	private int currentMajor;
 	private int currentMinor;
@@ -50,12 +51,12 @@ public class Updater
 			outdated = false;
 			try
 			{
-				String[] parts = CURRENT_VERSION.split("\\.");
+				String[] parts = Constants.VERSION.split("\\.");
 				currentMajor = Integer.parseInt(parts[0]);
-				if(CURRENT_VERSION.contains("pre"))
+				if(Constants.VERSION.contains("pre"))
 					currentPreRelease =
-						Integer.parseInt(CURRENT_VERSION
-							.substring(CURRENT_VERSION.indexOf("pre") + 3));
+						Integer.parseInt(Constants.VERSION
+							.substring(Constants.VERSION.indexOf("pre") + 3));
 				else
 					currentPreRelease = 0;
 				if(parts.length > 2)
@@ -75,7 +76,7 @@ public class Updater
 							parts[1].indexOf("pre")));
 			}catch(Exception e)
 			{
-				System.err.println("Current version \"" + CURRENT_VERSION
+				System.err.println("Current version \"" + Constants.VERSION
 					+ "\" doesn't follow the semver.org syntax!");
 				e.printStackTrace();
 			}
@@ -137,7 +138,7 @@ public class Updater
 				outdated = isLatestVersionHigher();
 			}catch(Exception e)
 			{
-				outdated = !latestVersion.equals(CURRENT_VERSION);
+				outdated = !latestVersion.equals(Constants.VERSION);
 			}
 			if(outdated)
 				System.out.println("Update found: " + latestVersion);
