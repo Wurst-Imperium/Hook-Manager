@@ -12,3 +12,7 @@
 hs_err_pid*
 
 /releases
+_site/
+.sass-cache/
+start.bat
+Thumbs.db
