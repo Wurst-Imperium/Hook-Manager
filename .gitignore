@@ -14,5 +14,5 @@ hs_err_pid*
 /releases
 _site/
 .sass-cache/
-*.bat
+start.bat
 Thumbs.db
