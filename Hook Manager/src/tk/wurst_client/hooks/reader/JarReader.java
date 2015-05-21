@@ -29,10 +29,9 @@ public class JarReader
 	
 	public void read(File file) throws IOException
 	{
-		JarInputStream input = new JarInputStream(new FileInputStream(file));
 		DefaultMutableTreeNode root =
 			new DefaultMutableTreeNode(file.getName());
-		DefaultTreeModel model = new DefaultTreeModel(root);
+		JarInputStream input = new JarInputStream(new FileInputStream(file));
 		for(JarEntry entry; (entry = input.getNextJarEntry()) != null;)
 			if(entry.isDirectory())
 				root.add(new DefaultMutableTreeNode(entry.getName()
@@ -62,7 +61,7 @@ public class JarReader
 				root.add(new DefaultMutableTreeNode(entry.getName().substring(
 					0, entry.getName().length() - 6), false));
 		input.close();
-		tree.setModel(model);
+		tree.setModel(new DefaultTreeModel(root));
 	}
 	
 	private DefaultMutableTreeNode find(DefaultMutableTreeNode root, String s)
