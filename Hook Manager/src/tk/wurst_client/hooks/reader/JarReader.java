@@ -40,7 +40,7 @@ public class JarReader
 			else if(!entry.getName().endsWith(".class"))
 			{
 				if(entry.getName().contains("/"))
-					find(
+					getNode(
 						root,
 						entry.getName()
 							.substring(0, entry.getName().lastIndexOf("/"))
@@ -50,7 +50,7 @@ public class JarReader
 					root.add(new DefaultMutableTreeNode(entry, false));
 			}else // TODO: Read class content (methods, etc.)
 			if(entry.getName().contains("/"))
-				find(
+				getNode(
 					root,
 					entry.getName()
 						.substring(0, entry.getName().lastIndexOf("/"))
@@ -64,7 +64,7 @@ public class JarReader
 		tree.setModel(new DefaultTreeModel(root));
 	}
 	
-	private DefaultMutableTreeNode find(DefaultMutableTreeNode root, String s)
+	private DefaultMutableTreeNode getNode(DefaultMutableTreeNode root, String s)
 	{
 		@SuppressWarnings("unchecked")
 		Enumeration<DefaultMutableTreeNode> nodes =
@@ -75,7 +75,8 @@ public class JarReader
 			if(node.toString().equalsIgnoreCase(s))
 				return node;
 		}
-		throw new NullPointerException("Node \"" + s
-			+ "\" does not exist in root \"" + root + "\".");
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode(s, true);
+		root.add(node);
+		return node;
 	}
 }
