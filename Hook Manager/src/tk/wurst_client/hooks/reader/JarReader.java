@@ -61,6 +61,8 @@ public class JarReader
 				root.add(new DefaultMutableTreeNode(entry.getName().substring(
 					0, entry.getName().length() - 6), false));
 		input.close();
+		getNode(root, "META-INF").add(
+			new DefaultMutableTreeNode("MANIFEST.MF", false));
 		tree.setModel(new DefaultTreeModel(root));
 	}
 	
