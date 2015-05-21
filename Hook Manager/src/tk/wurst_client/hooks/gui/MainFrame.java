@@ -15,15 +15,15 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
+import tk.wurst_client.hooks.reader.JarReader;
 import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
 import tk.wurst_client.update.Updater;
@@ -314,8 +314,12 @@ public class MainFrame extends JFrame
 	
 	private void openJar(File file)
 	{
-		tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(file
-			.getName())));
-		// TODO
+		try
+		{
+			new JarReader(tree).read(file);
+		}catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
