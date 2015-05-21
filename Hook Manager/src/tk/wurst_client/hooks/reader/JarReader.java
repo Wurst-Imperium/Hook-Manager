@@ -10,6 +10,7 @@ package tk.wurst_client.hooks.reader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
@@ -32,60 +33,50 @@ public class JarReader
 		DefaultMutableTreeNode root =
 			new DefaultMutableTreeNode(file.getName());
 		DefaultTreeModel model = new DefaultTreeModel(root);
-		// XXX
-		// new DefaultMutableTreeNode("JTree") {
-		// {
-		// DefaultMutableTreeNode node_1;
-		// node_1 = new DefaultMutableTreeNode("colors");
-		// node_1.add(new DefaultMutableTreeNode("blue"));
-		// node_1.add(new DefaultMutableTreeNode("violet"));
-		// node_1.add(new DefaultMutableTreeNode("red"));
-		// node_1.add(new DefaultMutableTreeNode("yellow"));
-		// add(node_1);
-		// node_1 = new DefaultMutableTreeNode("sports");
-		// node_1.add(new DefaultMutableTreeNode("basketball"));
-		// node_1.add(new DefaultMutableTreeNode("soccer"));
-		// node_1.add(new DefaultMutableTreeNode("football"));
-		// node_1.add(new DefaultMutableTreeNode("hockey"));
-		// add(node_1);
-		// node_1 = new DefaultMutableTreeNode("food");
-		// node_1.add(new DefaultMutableTreeNode("hot dogs"));
-		// node_1.add(new DefaultMutableTreeNode("pizza"));
-		// node_1.add(new DefaultMutableTreeNode("ravioli"));
-		// node_1.add(new DefaultMutableTreeNode("bananas"));
-		// node_1.add(new DefaultMutableTreeNode("tacos"));
-		// add(node_1);
-		// }
-		// }
 		for(JarEntry entry; (entry = input.getNextJarEntry()) != null;)
 			if(entry.isDirectory())
-			{
 				root.add(new DefaultMutableTreeNode(entry.getName()
 					.substring(0, entry.getName().length() - 1)
 					.replace("/", "."), true));
-			}else if(!entry.getName().endsWith(".class"))
+			else if(!entry.getName().endsWith(".class"))
 			{
-				// TODO
-				// output.putNextEntry(entry);
-				// byte[] buffer = new byte[8192];
-				// for(int length; (length = input.read(buffer)) != -1;)
-				// output.write(buffer, 0, length);
-				// output.closeEntry();
-			}else
-			{
-				// TODO
-				// output.putNextEntry(new JarEntry(entry.getName()));
-				// ClassReader reader = new ClassReader(input);
-				// ClassWriter writer = new
-				// ClassWriter(ClassWriter.COMPUTE_MAXS);
-				// ClassHookInjector hookInjector =
-				// new ClassHookInjector(Opcodes.ASM4, writer);
-				// reader.accept(hookInjector, 0);
-				// output.write(writer.toByteArray());
-				// output.closeEntry();
-			}
-		// output.close();
+				if(entry.getName().contains("/"))
+					find(
+						root,
+						entry.getName()
+							.substring(0, entry.getName().lastIndexOf("/"))
+							.replace("/", ".")).add(
+						new DefaultMutableTreeNode(entry, false));
+				else
+					root.add(new DefaultMutableTreeNode(entry, false));
+			}else // TODO: Read class content (methods, etc.)
+			if(entry.getName().contains("/"))
+				find(
+					root,
+					entry.getName()
+						.substring(0, entry.getName().lastIndexOf("/"))
+						.replace("/", ".")).add(
+					new DefaultMutableTreeNode(entry.getName().substring(0,
+						entry.getName().length() - 6), false));
+			else
+				root.add(new DefaultMutableTreeNode(entry.getName().substring(
+					0, entry.getName().length() - 6), false));
 		input.close();
 		tree.setModel(model);
+	}
+	
+	private DefaultMutableTreeNode find(DefaultMutableTreeNode root, String s)
+	{
+		@SuppressWarnings("unchecked")
+		Enumeration<DefaultMutableTreeNode> nodes =
+			root.depthFirstEnumeration();
+		while(nodes.hasMoreElements())
+		{
+			DefaultMutableTreeNode node = nodes.nextElement();
+			if(node.toString().equalsIgnoreCase(s))
+				return node;
+		}
+		throw new NullPointerException("Node \"" + s
+			+ "\" does not exist in root \"" + root + "\".");
 	}
 }
