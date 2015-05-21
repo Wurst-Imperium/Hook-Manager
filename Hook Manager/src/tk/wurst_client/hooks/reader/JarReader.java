@@ -10,7 +10,9 @@ package tk.wurst_client.hooks.reader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
@@ -63,6 +65,7 @@ public class JarReader
 		input.close();
 		getNode(root, "META-INF").add(
 			new DefaultMutableTreeNode("MANIFEST.MF", false));
+		sortNode(root);
 		tree.setModel(new DefaultTreeModel(root));
 	}
 	
@@ -80,5 +83,45 @@ public class JarReader
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(s, true);
 		root.add(node);
 		return node;
+	}
+	
+	private void sortNode(DefaultMutableTreeNode node)
+	{
+		List<DefaultMutableTreeNode> packages =
+			new ArrayList<DefaultMutableTreeNode>();
+		List<DefaultMutableTreeNode> classes =
+			new ArrayList<DefaultMutableTreeNode>();
+		List<DefaultMutableTreeNode> files =
+			new ArrayList<DefaultMutableTreeNode>();
+		for(Enumeration subnodes = node.children(); subnodes.hasMoreElements();)
+		{
+			DefaultMutableTreeNode subnode =
+				(DefaultMutableTreeNode)subnodes.nextElement();
+			if(subnode.getAllowsChildren())
+			{
+				sortNode(subnode);
+				packages.add(subnode);
+			}else if(subnode.toString().endsWith(".class"))
+				classes.add(subnode);
+			else
+				files.add(subnode);
+		}
+		
+		packages
+			.sort((DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) -> o1
+				.toString().compareToIgnoreCase(o2.toString()));
+		for(DefaultMutableTreeNode packageNode : packages)
+			node.add(packageNode);
+		
+		classes
+			.sort((DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) -> o1
+				.toString().compareToIgnoreCase(o2.toString()));
+		for(DefaultMutableTreeNode classNode : classes)
+			node.add(classNode);
+		
+		files.sort((DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) -> o1
+			.toString().compareToIgnoreCase(o2.toString()));
+		for(DefaultMutableTreeNode fileNode : files)
+			node.add(fileNode);
 	}
 }
