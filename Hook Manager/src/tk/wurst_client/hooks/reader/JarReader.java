@@ -60,8 +60,9 @@ public class JarReader
 		for(JarEntry entry; (entry = input.getNextJarEntry()) != null;)
 			if(entry.isDirectory())
 			{
-				// output.putNextEntry(entry);
-				// output.closeEntry();
+				root.add(new DefaultMutableTreeNode(entry.getName()
+					.substring(0, entry.getName().length() - 1)
+					.replace("/", "."), true));
 			}else if(!entry.getName().endsWith(".class"))
 			{
 				// TODO
