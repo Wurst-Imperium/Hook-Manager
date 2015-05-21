@@ -26,6 +26,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
+import tk.wurst_client.hooks.injector.ClassHookInjector;
 import tk.wurst_client.update.Updater;
 
 public class Prototype
