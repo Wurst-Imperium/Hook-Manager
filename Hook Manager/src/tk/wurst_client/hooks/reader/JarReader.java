@@ -1,6 +1,6 @@
 /*
  * Copyright © 2015 | Alexander01998 | All rights reserved.
- *
+ * 
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
@@ -23,12 +23,12 @@ import javax.swing.tree.DefaultTreeModel;
 public class JarReader
 {
 	private JTree tree;
-
+	
 	public JarReader(JTree tree)
 	{
 		this.tree = tree;
 	}
-
+	
 	public void read(File file) throws IOException
 	{
 		DefaultMutableTreeNode root =
@@ -39,41 +39,39 @@ public class JarReader
 				root.add(new DefaultMutableTreeNode(entry.getName()
 					.substring(0, entry.getName().length() - 1)
 					.replace("/", "."), true));
-			else if(!entry.getName().endsWith(".class"))
+			else if(entry.getName().endsWith(".class"))
 			{
+				// TODO: Read class content (methods, etc.)
 				if(entry.getName().contains("/"))
 					getNode(
 						root,
 						entry.getName()
+							.substring(0, entry.getName().lastIndexOf("/"))
+							.replace("/", ".")).add(
+						new DefaultMutableTreeNode(entry.getName(), false));
+				else
+					root.add(new DefaultMutableTreeNode(entry.getName(), false));
+			}else if(entry.getName().contains("/"))
+				getNode(
+					root,
+					entry.getName()
 						.substring(0, entry.getName().lastIndexOf("/"))
 						.replace("/", ".")).add(
-							new DefaultMutableTreeNode(entry, false));
-				else
-					root.add(new DefaultMutableTreeNode(entry, false));
-			}else // TODO: Read class content (methods, etc.)
-				if(entry.getName().contains("/"))
-					getNode(
-						root,
-						entry.getName()
-						.substring(0, entry.getName().lastIndexOf("/"))
-						.replace("/", ".")).add(
-							new DefaultMutableTreeNode(entry.getName().substring(0,
-								entry.getName().length() - 6), false));
-				else
-					root.add(new DefaultMutableTreeNode(entry.getName().substring(
-						0, entry.getName().length() - 6), false));
+					new DefaultMutableTreeNode(entry, false));
+			else
+				root.add(new DefaultMutableTreeNode(entry, false));
 		input.close();
 		getNode(root, "META-INF").add(
 			new DefaultMutableTreeNode("MANIFEST.MF", false));
 		sortNode(root);
 		tree.setModel(new DefaultTreeModel(root));
 	}
-
+	
 	private DefaultMutableTreeNode getNode(DefaultMutableTreeNode root, String s)
 	{
 		@SuppressWarnings("unchecked")
 		Enumeration<DefaultMutableTreeNode> nodes =
-		root.depthFirstEnumeration();
+			root.depthFirstEnumeration();
 		while(nodes.hasMoreElements())
 		{
 			DefaultMutableTreeNode node = nodes.nextElement();
@@ -84,7 +82,7 @@ public class JarReader
 		root.add(node);
 		return node;
 	}
-
+	
 	private void sortNode(DefaultMutableTreeNode node)
 	{
 		List<DefaultMutableTreeNode> packages =
@@ -105,24 +103,25 @@ public class JarReader
 					packages.add(subnode);
 				}
 			}else if(subnode.toString().endsWith(".class"))
-				classes.add(subnode);
+				classes.add(new DefaultMutableTreeNode(subnode.toString()
+					.substring(0, subnode.toString().length() - 6), false));
 			else
 				files.add(subnode);
 		}
-
+		
 		node.removeAllChildren();
 		packages
-		.sort((DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) -> o1
-			.toString().compareToIgnoreCase(o2.toString()));
+			.sort((DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) -> o1
+				.toString().compareToIgnoreCase(o2.toString()));
 		for(DefaultMutableTreeNode packageNode : packages)
 			node.add(packageNode);
-
+		
 		classes
-		.sort((DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) -> o1
-			.toString().compareToIgnoreCase(o2.toString()));
+			.sort((DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) -> o1
+				.toString().compareToIgnoreCase(o2.toString()));
 		for(DefaultMutableTreeNode classNode : classes)
 			node.add(classNode);
-
+		
 		files.sort((DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) -> o1
 			.toString().compareToIgnoreCase(o2.toString()));
 		for(DefaultMutableTreeNode fileNode : files)
