@@ -14,7 +14,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -31,6 +30,7 @@ import tk.wurst_client.update.Updater;
 public class MainFrame extends JFrame
 {
 	private JTree tree;
+	private JarReader jarReader;
 	
 	/**
 	 * Launch the application.
@@ -93,7 +93,13 @@ public class MainFrame extends JFrame
 					"Jar file", "jar"));
 				fileChooser.setAcceptAllFileFilterUsed(false);
 				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					openJar(fileChooser.getSelectedFile());
+					try
+					{
+						jarReader.read(fileChooser.getSelectedFile());
+					}catch(IOException e1)
+					{
+						e1.printStackTrace();
+					}
 			}
 		});
 		mnFile.add(mntmOpenInputJar);
@@ -246,6 +252,7 @@ public class MainFrame extends JFrame
 		splitPane.setLeftComponent(scrollPane);
 		
 		tree = new JTree();
+		jarReader = new JarReader(tree);
 		scrollPane.setViewportView(tree);
 		
 		JPanel panel = new JPanel();
@@ -310,16 +317,5 @@ public class MainFrame extends JFrame
 				.addComponent(lbltodoMoreOptions)
 				.addContainerGap(68, Short.MAX_VALUE)));
 		panel_2.setLayout(gl_panel_2);
-	}
-	
-	private void openJar(File file)
-	{
-		try
-		{
-			new JarReader(tree).read(file);
-		}catch(IOException e)
-		{
-			e.printStackTrace();
-		}
 	}
 }
