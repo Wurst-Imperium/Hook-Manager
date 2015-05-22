@@ -1,6 +1,6 @@
 # Hook Manager [![latest release](https://img.shields.io/github/release/Wurst-Imperium/Hook-Manager.svg?label=latest%20release)](https://github.com/Wurst-Imperium/Hook-Manager/releases/latest) [![](https://img.shields.io/github/license/Wurst-Imperium/Hook-Manager.svg)](https://github.com/Wurst-Imperium/Hook-Manager/blob/master/LICENSE)
 
-:anchor: A tool for injecting hooks into Java bytecode.
+#### Modify Java files. Any Java files!
 
 > <q>The best way to deobfuscate a Java program is to not deobfuscate it at all.</q>  
 > -Alexander01998
