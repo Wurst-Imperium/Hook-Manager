@@ -20,6 +20,11 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
+
+import tk.wurst_client.hooks.reader.data.JarData;
+
 public class JarReader
 {
 	private JTree tree;
@@ -33,6 +38,7 @@ public class JarReader
 	{
 		DefaultMutableTreeNode root =
 			new DefaultMutableTreeNode(file.getName());
+		JarData jarData = new JarData();
 		JarInputStream input = new JarInputStream(new FileInputStream(file));
 		for(JarEntry entry; (entry = input.getNextJarEntry()) != null;)
 			if(entry.isDirectory())
@@ -41,7 +47,10 @@ public class JarReader
 					.replace("/", "."), true));
 			else if(entry.getName().endsWith(".class"))
 			{
-				// TODO: Read class content (methods, etc.)
+				ClassReader reader = new ClassReader(input);
+				ClassDataReader wReader = new ClassDataReader(Opcodes.ASM4, jarData);
+				reader.accept(wReader, 0);
+				
 				if(entry.getName().contains("/"))
 					getNode(
 						root,
