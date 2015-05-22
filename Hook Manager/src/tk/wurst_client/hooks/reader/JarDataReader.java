@@ -25,11 +25,11 @@ import org.objectweb.asm.Opcodes;
 
 import tk.wurst_client.hooks.reader.data.JarData;
 
-public class JarReader
+public class JarDataReader
 {
 	private JTree tree;
 	
-	public JarReader(JTree tree)
+	public JarDataReader(JTree tree)
 	{
 		this.tree = tree;
 	}

@@ -25,7 +25,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import tk.wurst_client.hooks.reader.JarReader;
+import tk.wurst_client.hooks.reader.JarDataReader;
 import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
 import tk.wurst_client.update.Updater;
@@ -33,7 +33,7 @@ import tk.wurst_client.update.Updater;
 public class MainFrame extends JFrame
 {
 	private JTree tree;
-	private JarReader jarReader;
+	private JarDataReader jarDataReader;
 	
 	/**
 	 * Launch the application.
@@ -100,7 +100,7 @@ public class MainFrame extends JFrame
 				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 					try
 					{
-						jarReader.read(fileChooser.getSelectedFile());
+						jarDataReader.read(fileChooser.getSelectedFile());
 					}catch(IOException e1)
 					{
 						e1.printStackTrace();
@@ -257,7 +257,7 @@ public class MainFrame extends JFrame
 		splitPane.setLeftComponent(scrollPane);
 		
 		tree = new JTree(new DefaultMutableTreeNode());
-		jarReader = new JarReader(tree);
+		jarDataReader = new JarDataReader(tree);
 		scrollPane.setViewportView(tree);
 		
 		JPanel panel = new JPanel();
