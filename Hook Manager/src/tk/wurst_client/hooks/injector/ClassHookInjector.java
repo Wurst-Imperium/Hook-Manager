@@ -8,7 +8,6 @@
 package tk.wurst_client.hooks.injector;
 
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 
 public class ClassHookInjector extends ClassVisitor
@@ -16,7 +15,7 @@ public class ClassHookInjector extends ClassVisitor
 	private int api;
 	private String className;
 
-	public ClassHookInjector(int api, ClassWriter cv)
+	public ClassHookInjector(int api, ClassVisitor cv)
 	{
 		super(api, cv);
 		this.api = api;
