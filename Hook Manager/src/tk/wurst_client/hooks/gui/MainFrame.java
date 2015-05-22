@@ -26,6 +26,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import tk.wurst_client.hooks.reader.JarDataReader;
+import tk.wurst_client.hooks.reader.data.JarData;
 import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
 import tk.wurst_client.update.Updater;
@@ -34,6 +35,7 @@ public class MainFrame extends JFrame
 {
 	private JTree tree;
 	private JarDataReader jarDataReader;
+	private JarData settings;
 	
 	/**
 	 * Launch the application.
@@ -100,7 +102,7 @@ public class MainFrame extends JFrame
 				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 					try
 					{
-						jarDataReader.read(fileChooser.getSelectedFile());
+						settings = jarDataReader.read(fileChooser.getSelectedFile());
 					}catch(IOException e1)
 					{
 						e1.printStackTrace();

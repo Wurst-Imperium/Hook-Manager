@@ -34,7 +34,7 @@ public class JarDataReader
 		this.tree = tree;
 	}
 	
-	public void read(File file) throws IOException
+	public JarData read(File file) throws IOException
 	{
 		DefaultMutableTreeNode root =
 			new DefaultMutableTreeNode(file.getName());
@@ -48,7 +48,8 @@ public class JarDataReader
 			else if(entry.getName().endsWith(".class"))
 			{
 				ClassReader reader = new ClassReader(input);
-				ClassDataReader wReader = new ClassDataReader(Opcodes.ASM4, jarData);
+				ClassDataReader wReader =
+					new ClassDataReader(Opcodes.ASM4, jarData);
 				reader.accept(wReader, 0);
 				
 				if(entry.getName().contains("/"))
@@ -74,6 +75,7 @@ public class JarDataReader
 			new DefaultMutableTreeNode("MANIFEST.MF", false));
 		sortNode(root);
 		tree.setModel(new DefaultTreeModel(root));
+		return jarData;
 	}
 	
 	private DefaultMutableTreeNode getNode(DefaultMutableTreeNode root, String s)
