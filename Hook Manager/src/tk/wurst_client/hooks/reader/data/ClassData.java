@@ -1,0 +1,30 @@
+/*
+ * Copyright © 2015 | Alexander01998 | All rights reserved.
+ * 
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+package tk.wurst_client.hooks.reader.data;
+
+import java.util.HashMap;
+
+public class ClassData
+{	
+	HashMap<String, MethodData> methods = new HashMap<String, MethodData>();
+	
+	public MethodData getMethod(String name)
+	{
+		return methods.get(name);
+	}
+	
+	public MethodData addMethod(String name, MethodData data)
+	{
+		return methods.put(name, data);
+	}
+	
+	public MethodData removeMethod(String name)
+	{
+		return methods.remove(name);
+	}
+}
