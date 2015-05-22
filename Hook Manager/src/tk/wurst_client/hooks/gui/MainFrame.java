@@ -14,7 +14,9 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
@@ -22,8 +24,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
+import tk.wurst_client.hooks.reader.JarDataReader;
+import tk.wurst_client.hooks.reader.data.JarData;
 import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
 import tk.wurst_client.update.Updater;
@@ -31,6 +34,8 @@ import tk.wurst_client.update.Updater;
 public class MainFrame extends JFrame
 {
 	private JTree tree;
+	private JarDataReader jarDataReader;
+	private JarData settings;
 	
 	/**
 	 * Launch the application.
@@ -82,6 +87,8 @@ public class MainFrame extends JFrame
 		menuBar.add(mnFile);
 		
 		JMenuItem mntmOpenInputJar = new JMenuItem("Open Input Jar...");
+		mntmOpenInputJar.setMnemonic(KeyEvent.VK_O);
+		mntmOpenInputJar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		mntmOpenInputJar.addActionListener(new ActionListener()
 		{
 			@Override
@@ -93,7 +100,13 @@ public class MainFrame extends JFrame
 					"Jar file", "jar"));
 				fileChooser.setAcceptAllFileFilterUsed(false);
 				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-					openJar(fileChooser.getSelectedFile());
+					try
+					{
+						settings = jarDataReader.read(fileChooser.getSelectedFile());
+					}catch(IOException e1)
+					{
+						e1.printStackTrace();
+					}
 			}
 		});
 		mnFile.add(mntmOpenInputJar);
@@ -245,7 +258,8 @@ public class MainFrame extends JFrame
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 		
-		tree = new JTree();
+		tree = new JTree(new DefaultMutableTreeNode());
+		jarDataReader = new JarDataReader(tree);
 		scrollPane.setViewportView(tree);
 		
 		JPanel panel = new JPanel();
@@ -310,12 +324,5 @@ public class MainFrame extends JFrame
 				.addComponent(lbltodoMoreOptions)
 				.addContainerGap(68, Short.MAX_VALUE)));
 		panel_2.setLayout(gl_panel_2);
-	}
-	
-	private void openJar(File file)
-	{
-		tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode(file
-			.getName())));
-		// TODO
 	}
 }
