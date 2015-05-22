@@ -23,6 +23,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import tk.wurst_client.hooks.reader.JarReader;
 import tk.wurst_client.hooks.util.Constants;
@@ -255,7 +256,7 @@ public class MainFrame extends JFrame
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 		
-		tree = new JTree();
+		tree = new JTree(new DefaultMutableTreeNode());
 		jarReader = new JarReader(tree);
 		scrollPane.setViewportView(tree);
 		
