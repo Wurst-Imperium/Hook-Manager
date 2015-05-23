@@ -8,10 +8,8 @@
 package tk.wurst_client.hooks.gui;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -19,8 +17,6 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -252,7 +248,7 @@ public class MainFrame extends JFrame
 		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setContinuousLayout(true);
-		splitPane.setResizeWeight(0.5);
+		splitPane.setResizeWeight(0.25);
 		contentPane.add(splitPane, BorderLayout.CENTER);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -262,67 +258,7 @@ public class MainFrame extends JFrame
 		jarDataReader = new JarDataReader(tree);
 		scrollPane.setViewportView(tree);
 		
-		JPanel panel = new JPanel();
-		splitPane.setRightComponent(panel);
-		panel.setLayout(new CardLayout(0, 0));
-		
-		JPanel panel_1 = new JPanel();
-		panel.add(panel_1, "name_14174167421138");
-		
-		JLabel lblSelectAMethod =
-			new JLabel(
-				"<html>\r\n<body width=256px>\r\n<center>\r\n<h1 color=#808080>\r\n<br>\r\n<br>\r\nNothing Selected\r\n</h1>\r\n<h3 color=#808080>\r\nSelect a method on the left to manage the hooks for it.");
-		panel_1.add(lblSelectAMethod);
-		
-		JPanel panel_2 = new JPanel();
-		panel.add(panel_2, "name_13972871414243");
-		
-		JCheckBox chckbxInjectHookBefore = new JCheckBox("Inject Hook before");
-		
-		JCheckBox chckbxCollectParameters = new JCheckBox("Collect parameters");
-		
-		JCheckBox chckbxInjectHookAfter = new JCheckBox("Inject Hook after");
-		
-		JCheckBox chckbxCollectParameters_1 =
-			new JCheckBox("Collect parameters");
-		
-		JLabel lblMethodName =
-			new JLabel("<html>\r\n<body width=256px>\r\n<h1>\r\nMethod Name");
-		
-		JLabel lbltodoMoreOptions = new JLabel("// TODO: More options");
-		lbltodoMoreOptions.setFont(new Font("Courier New", Font.PLAIN, 11));
-		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-		gl_panel_2.setHorizontalGroup(gl_panel_2.createParallelGroup(
-			Alignment.LEADING).addGroup(
-			gl_panel_2
-				.createSequentialGroup()
-				.addContainerGap()
-				.addGroup(
-					gl_panel_2
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-							gl_panel_2.createSequentialGroup().addGap(21)
-								.addComponent(chckbxCollectParameters_1))
-						.addComponent(chckbxInjectHookBefore)
-						.addComponent(lblMethodName)
-						.addGroup(
-							gl_panel_2.createSequentialGroup().addGap(21)
-								.addComponent(chckbxCollectParameters))
-						.addComponent(chckbxInjectHookAfter)
-						.addComponent(lbltodoMoreOptions))
-				.addContainerGap(145, Short.MAX_VALUE)));
-		gl_panel_2.setVerticalGroup(gl_panel_2.createParallelGroup(
-			Alignment.LEADING).addGroup(
-			gl_panel_2.createSequentialGroup().addContainerGap()
-				.addComponent(lblMethodName).addGap(18)
-				.addComponent(chckbxInjectHookBefore)
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addComponent(chckbxCollectParameters).addGap(18)
-				.addComponent(chckbxInjectHookAfter)
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addComponent(chckbxCollectParameters_1).addGap(18)
-				.addComponent(lbltodoMoreOptions)
-				.addContainerGap(68, Short.MAX_VALUE)));
-		panel_2.setLayout(gl_panel_2);
+		HTMLPanel editor = new HTMLPanel();
+		splitPane.setRightComponent(editor);
 	}
 }
