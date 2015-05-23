@@ -91,8 +91,8 @@ public class HTMLPanel extends JPanel
 		});
 	}
 	
-	public void executeScript(String script)
+	public Object executeScript(String script)
 	{
-		engine.executeScript(script);
+		return engine.executeScript(script);
 	}
 }

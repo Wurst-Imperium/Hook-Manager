@@ -63,8 +63,8 @@ public class HTMLDialog extends JDialog
 		htmlPanel.setBridge(bridge);
 	}
 	
-	public void executeScript(String script)
+	public Object executeScript(String script)
 	{
-		htmlPanel.executeScript(script);
+		return htmlPanel.executeScript(script);
 	}
 }
