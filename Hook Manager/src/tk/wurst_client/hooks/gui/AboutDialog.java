@@ -18,7 +18,7 @@ public class AboutDialog extends HTMLDialog
 	{
 		super(parent);
 		setTitle("About Hook Manager");
-		setResource("tk/wurst_client/hooks/gui/html/about.html");
+		setResource("about.html");
 		setBridge(new Bridge());
 	}
 	

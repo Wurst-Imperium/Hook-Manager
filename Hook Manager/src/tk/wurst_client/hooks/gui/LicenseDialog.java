@@ -15,7 +15,7 @@ public class LicenseDialog extends HTMLDialog
 	{
 		super(parent);
 		setTitle("License");
-		setResource("tk/wurst_client/hooks/gui/html/license.html");
+		setResource("license.html");
 		setBridge(new Bridge());
 	}
 	

@@ -21,6 +21,7 @@ import javafx.scene.web.WebView;
 
 import javax.swing.JPanel;
 
+import tk.wurst_client.hooks.util.Constants;
 import netscape.javascript.JSObject;
 
 public class HTMLPanel extends JPanel
@@ -47,12 +48,12 @@ public class HTMLPanel extends JPanel
 		add(jfxPanel);
 	}
 	
-	public void setResource(String resource)
+	public void setHTMLFile(String filename)
 	{
 		try
 		{
 			InputStream input =
-				getClass().getClassLoader().getResourceAsStream(resource);
+				getClass().getClassLoader().getResourceAsStream(Constants.Resources.HTML_DIR + filename);
 			final char[] buffer = new char[8192];
 			StringBuilder output = new StringBuilder();
 			Reader reader = new InputStreamReader(input);

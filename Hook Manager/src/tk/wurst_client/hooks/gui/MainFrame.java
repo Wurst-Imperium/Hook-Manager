@@ -259,7 +259,7 @@ public class MainFrame extends JFrame
 		scrollPane.setViewportView(tree);
 		
 		HTMLPanel editor = new HTMLPanel();
-		editor.setResource("tk/wurst_client/hooks/gui/html/editor.html");
+		editor.setHTMLFile("editor.html");
 		editor.setBridge(new EditorBridge());
 		splitPane.setRightComponent(editor);
 	}

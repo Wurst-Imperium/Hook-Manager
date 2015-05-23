@@ -50,7 +50,7 @@ public class HTMLDialog extends JDialog
 	
 	public void setResource(String resource)
 	{
-		htmlPanel.setResource(resource);
+		htmlPanel.setHTMLFile(resource);
 	}
 	
 	public void setHTML(String html)
