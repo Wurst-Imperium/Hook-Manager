@@ -37,6 +37,7 @@ public class HTMLPanel extends JPanel
 			public void run()
 			{
 				WebView view = new WebView();
+				view.setContextMenuEnabled(false);
 				engine = view.getEngine();
 				jfxPanel.setScene(new Scene(view));
 			}
