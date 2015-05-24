@@ -20,11 +20,12 @@
           <hr>
           <div class="row">
             <div class="col-xs-12">
-              <p class="text-center lead">
-                Press
-                <kbd>Ctrl+O</kbd>
-                to open a Jar.
-              </p>
+              <p id="msg" class="text-center lead"></p>
+              <script>
+              	function setMessage(message){
+	         		$("#msg").html(message);
+              	}
+              </script>
             </div>
           </div>
         </div>

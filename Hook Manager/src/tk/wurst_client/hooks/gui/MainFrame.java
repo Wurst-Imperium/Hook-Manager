@@ -16,6 +16,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
+import javafx.application.Platform;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -85,7 +87,8 @@ public class MainFrame extends JFrame
 		
 		JMenuItem mntmOpenInputJar = new JMenuItem("Open Input Jar...");
 		mntmOpenInputJar.setMnemonic(KeyEvent.VK_O);
-		mntmOpenInputJar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+		mntmOpenInputJar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+			InputEvent.CTRL_MASK));
 		mntmOpenInputJar.addActionListener(new ActionListener()
 		{
 			@Override
@@ -99,7 +102,8 @@ public class MainFrame extends JFrame
 				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 					try
 					{
-						settings = jarDataReader.read(fileChooser.getSelectedFile());
+						settings =
+							jarDataReader.read(fileChooser.getSelectedFile());
 					}catch(IOException e1)
 					{
 						e1.printStackTrace();
@@ -260,8 +264,16 @@ public class MainFrame extends JFrame
 		scrollPane.setViewportView(tree);
 		
 		editor = new HTMLPanel();
-		editor.setHTMLFile("editor-nojar.html");
+		editor.setHTMLFile("editor-message.html");
 		editor.setBridge(new EditorBridge());
+		editor.doWhenFinished(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				editor.executeScript("$(document).ready(function(){setMessage('Press <kbd>Ctrl+O</kbd> to open a Jar.');});");
+			}
+		});
 		splitPane.setRightComponent(editor);
 	}
 }

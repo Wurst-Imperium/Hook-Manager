@@ -10,6 +10,9 @@ package tk.wurst_client.hooks.gui;
 import java.awt.GridLayout;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
@@ -94,5 +97,27 @@ public class HTMLPanel extends JPanel
 	public Object executeScript(String script)
 	{
 		return engine.executeScript(script);
+	}
+	
+	public void doWhenFinished(Runnable task)
+	{
+		Platform.runLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				engine.getLoadWorker().stateProperty()
+					.addListener(new ChangeListener<State>()
+					{
+						@Override
+						public void changed(ObservableValue ov, State oldState,
+							State newState)
+						{
+							if(newState == State.SUCCEEDED)
+								task.run();
+						}
+					});
+			}
+		});
 	}
 }
