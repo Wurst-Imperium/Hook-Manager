@@ -68,4 +68,9 @@ public class HTMLDialog extends JDialog
 	{
 		return htmlPanel.executeScript(script);
 	}
+
+	public void executeScriptAsync(String script)
+	{
+		htmlPanel.executeScriptAsync(script);
+	}
 }

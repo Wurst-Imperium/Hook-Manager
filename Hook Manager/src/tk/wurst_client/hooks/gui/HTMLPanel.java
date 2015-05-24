@@ -99,6 +99,11 @@ public class HTMLPanel extends JPanel
 		return engine.executeScript(script);
 	}
 	
+	public void executeScriptAsync(String script)
+	{
+		Platform.runLater(() -> executeScript(script));
+	}
+	
 	public void doWhenFinished(Runnable task)
 	{
 		Platform.runLater(new Runnable()
