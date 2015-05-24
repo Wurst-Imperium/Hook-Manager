@@ -8,10 +8,6 @@
 package tk.wurst_client.hooks.gui;
 
 import java.awt.GridLayout;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -21,8 +17,8 @@ import javafx.scene.web.WebView;
 
 import javax.swing.JPanel;
 
-import tk.wurst_client.hooks.util.Constants;
 import netscape.javascript.JSObject;
+import tk.wurst_client.hooks.util.Constants;
 
 public class HTMLPanel extends JPanel
 {
@@ -50,21 +46,16 @@ public class HTMLPanel extends JPanel
 	
 	public void setHTMLFile(String filename)
 	{
-		try
+		Platform.runLater(new Runnable()
 		{
-			InputStream input =
-				getClass().getClassLoader().getResourceAsStream(Constants.Resources.HTML_DIR + filename);
-			final char[] buffer = new char[8192];
-			StringBuilder output = new StringBuilder();
-			Reader reader = new InputStreamReader(input);
-			for(int length; (length = reader.read(buffer, 0, 8192)) > 0;)
-				output.append(buffer, 0, length);
-			reader.close();
-			setHTML(output.toString());
-		}catch(IOException e)
-		{
-			e.printStackTrace();
-		}
+			@Override
+			public void run()
+			{
+				engine.load(getClass().getClassLoader()
+					.getResource(Constants.Resources.HTML_DIR + filename)
+					.toExternalForm());
+			}
+		});
 	}
 	
 	public void setHTML(String html)
@@ -86,7 +77,8 @@ public class HTMLPanel extends JPanel
 			@Override
 			public void run()
 			{
-				((JSObject)engine.executeScript("window")).setMember("java", bridge);
+				((JSObject)engine.executeScript("window")).setMember("java",
+					bridge);
 			}
 		});
 	}
