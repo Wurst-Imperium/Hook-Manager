@@ -22,10 +22,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import tk.wurst_client.hooks.reader.JarDataReader;
+import tk.wurst_client.hooks.reader.data.ClassData;
 import tk.wurst_client.hooks.reader.data.JarData;
 import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
 import tk.wurst_client.update.Updater;
+
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
 
 public class MainFrame extends JFrame
 {
@@ -260,6 +264,25 @@ public class MainFrame extends JFrame
 		splitPane.setLeftComponent(scrollPane);
 		
 		tree = new JTree(new DefaultMutableTreeNode());
+		tree.addTreeSelectionListener(new TreeSelectionListener()
+		{
+			@Override
+			public void valueChanged(TreeSelectionEvent e)
+			{
+				String path =
+					((DefaultMutableTreeNode)e.getPath().getPathComponent(1))
+						.toString().replace(".", "/");
+				for(int i = 2; i < e.getPath().getPath().length; i++)
+					path +=
+						"/"
+							+ ((DefaultMutableTreeNode)e.getPath()
+								.getPathComponent(i));
+				ClassData classData = settings.getClass(path);
+				if(classData == null)
+					return;
+				editor.setHTMLFile("editor-edit.html");
+			}
+		});
 		jarDataReader = new JarDataReader(tree);
 		scrollPane.setViewportView(tree);
 		
