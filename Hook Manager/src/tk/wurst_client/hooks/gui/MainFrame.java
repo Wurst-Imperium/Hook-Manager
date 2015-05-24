@@ -104,6 +104,8 @@ public class MainFrame extends JFrame
 					{
 						settings =
 							jarDataReader.read(fileChooser.getSelectedFile());
+						editor
+							.executeScriptAsync("setMessage('Select a class to start injecting hooks.')");
 					}catch(IOException e1)
 					{
 						e1.printStackTrace();
@@ -271,7 +273,8 @@ public class MainFrame extends JFrame
 			@Override
 			public void run()
 			{
-				editor.executeScript("$(document).ready(function(){setMessage('Press <kbd>Ctrl+O</kbd> to open a Jar.');});");
+				editor
+					.executeScript("$(document).ready(function(){setMessage('Press <kbd>Ctrl+O</kbd> to open a Jar.');});");
 			}
 		});
 		splitPane.setRightComponent(editor);
