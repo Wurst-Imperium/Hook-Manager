@@ -32,6 +32,7 @@ public class MainFrame extends JFrame
 	private JTree tree;
 	private JarDataReader jarDataReader;
 	private JarData settings;
+	private HTMLPanel editor;
 	
 	/**
 	 * Launch the application.
@@ -258,7 +259,7 @@ public class MainFrame extends JFrame
 		jarDataReader = new JarDataReader(tree);
 		scrollPane.setViewportView(tree);
 		
-		HTMLPanel editor = new HTMLPanel();
+		editor = new HTMLPanel();
 		editor.setHTMLFile("editor-nojar.html");
 		editor.setBridge(new EditorBridge());
 		splitPane.setRightComponent(editor);
