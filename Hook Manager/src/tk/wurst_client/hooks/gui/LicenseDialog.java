@@ -15,7 +15,7 @@ public class LicenseDialog extends HTMLDialog
 	{
 		super(parent);
 		setTitle("License");
-		setResource("license.html");
+		setHTMLFile("license.html");
 		setBridge(new Bridge());
 	}
 	

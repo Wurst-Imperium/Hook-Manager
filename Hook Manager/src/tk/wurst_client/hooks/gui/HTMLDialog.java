@@ -35,7 +35,8 @@ public class HTMLDialog extends JDialog
 	
 	/**
 	 * Create the dialog.
-	 * @param parent 
+	 * 
+	 * @param parent
 	 */
 	public HTMLDialog(Component parent)
 	{
@@ -48,9 +49,9 @@ public class HTMLDialog extends JDialog
 		}
 	}
 	
-	public void setResource(String resource)
+	public void setHTMLFile(String filename)
 	{
-		htmlPanel.setHTMLFile(resource);
+		htmlPanel.setHTMLFile(filename);
 	}
 	
 	public void setHTML(String html)

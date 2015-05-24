@@ -18,7 +18,7 @@ public class AboutDialog extends HTMLDialog
 	{
 		super(parent);
 		setTitle("About Hook Manager");
-		setResource("about.html");
+		setHTMLFile("about.html");
 		setBridge(new Bridge());
 	}
 	
