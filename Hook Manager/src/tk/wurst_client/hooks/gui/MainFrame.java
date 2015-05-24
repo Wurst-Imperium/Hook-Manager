@@ -16,8 +16,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
-import javafx.application.Platform;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
