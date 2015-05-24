@@ -7,7 +7,23 @@
  */
 package tk.wurst_client.hooks.gui;
 
+import tk.wurst_client.hooks.reader.data.ClassData;
+
 public class EditorBridge
-{	
+{
+	private ClassData classData;
 	
+	public void setClassData(ClassData classData)
+	{
+		this.classData = classData;
+	}
+	
+	public String[] getMethodNames()
+	{
+		if(classData != null)
+			return classData.getMethodNames().toArray(
+				new String[classData.getMethodNames().size()]);
+		else
+			return null;
+	}
 }

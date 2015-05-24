@@ -18,6 +18,8 @@ import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -28,15 +30,13 @@ import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
 import tk.wurst_client.update.Updater;
 
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.event.TreeSelectionEvent;
-
 public class MainFrame extends JFrame
 {
 	private JTree tree;
 	private JarDataReader jarDataReader;
 	private JarData settings;
 	private HTMLPanel editor;
+	private EditorBridge editorBridge;
 	
 	/**
 	 * Launch the application.
@@ -278,9 +278,9 @@ public class MainFrame extends JFrame
 							+ ((DefaultMutableTreeNode)e.getPath()
 								.getPathComponent(i));
 				ClassData classData = settings.getClass(path);
-				if(classData == null)
-					return;
+				editorBridge.setClassData(classData);
 				editor.setHTMLFile("editor-edit.html");
+				editor.doWhenFinished(() -> editor.setBridge(editorBridge));
 			}
 		});
 		jarDataReader = new JarDataReader(tree);
@@ -288,7 +288,7 @@ public class MainFrame extends JFrame
 		
 		editor = new HTMLPanel();
 		editor.setHTMLFile("editor-message.html");
-		editor.setBridge(new EditorBridge());
+		editorBridge = new EditorBridge();
 		editor.doWhenFinished(new Runnable()
 		{
 			@Override

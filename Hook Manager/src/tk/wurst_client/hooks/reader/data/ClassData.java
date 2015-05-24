@@ -8,6 +8,7 @@
 package tk.wurst_client.hooks.reader.data;
 
 import java.util.HashMap;
+import java.util.Set;
 
 public class ClassData
 {	
@@ -26,5 +27,10 @@ public class ClassData
 	public MethodData removeMethod(String name)
 	{
 		return methods.remove(name);
+	}
+
+	public Set<String> getMethodNames()
+	{
+		return methods.keySet();
 	}
 }

@@ -6,24 +6,45 @@
   <link href="css/editor.css" rel="stylesheet">
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script>
+    function load(){
+    	window.setTimeout(function(){
+			try{
+  				var methodNames = java.getMethodNames();
+  				if(!$.isArray(methodNames)){
+  	  				$("p").html("Not a class.");
+  	  				return;
+  				}
+  				var newHtml = '<div class="panel panel-default">'
+  					+ '<div class="panel-heading">(Class Name)</div>'
+  					+ '<div class="list-group">';
+        		for(i in methodNames){
+        			newHtml += '<div class="list-group-item">' + methodNames[i].toString().replace("<", "&lt;") + "</div>";
+        		}
+        		newHtml += "</div></div>";
+  				$(".col-xs-12").html(newHtml);
+        	}catch(e){
+        		load();
+        	}
+  		}, 1);
+    }
+    
+  	$(document).ready(load());
+  </script>
 </head>
 <body>
+  <div class="section">
+    <div class="section-center">
   <div class="container-fluid">
-    <div class="row center-block">
       <div class="row">
-        <div class="col-xs-12">
-          <p class="lead">
-            Method 1
-          </p>
-          <p class="lead">
-            Method 2
-          </p>
-          <p class="lead">
-            Method 3
+        <div class="col-xs-12" style="margin-top: 1em;">
+          <p class="text-center lead">
+            Loading...
           </p>
         </div>
       </div>
-    </div>
+  </div>
+      </div>
   </div>
 </body>
 </html>
