@@ -25,4 +25,9 @@ public final class Constants
 			+ "/labels/enhancement";
 		public static final String WIKI = GITHUB_PAGE + "/wiki";
 	}
+	
+	public static final class Resources
+	{
+		public static final String HTML_DIR = "tk/wurst_client/hooks/gui/html/";
+	}
 }

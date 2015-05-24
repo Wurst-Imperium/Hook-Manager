@@ -7,23 +7,7 @@
  */
 package tk.wurst_client.hooks.gui;
 
-import java.awt.Component;
-
-public class LicenseDialog extends HTMLDialog
-{
-	public LicenseDialog(Component parent)
-	{
-		super(parent);
-		setTitle("License");
-		setHTMLFile("license.html");
-		setBridge(new Bridge());
-	}
+public class EditorBridge
+{	
 	
-	public class Bridge
-	{
-		public void exit()
-		{
-			LicenseDialog.this.dispose();
-		}
-	}
 }
