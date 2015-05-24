@@ -259,7 +259,7 @@ public class MainFrame extends JFrame
 		scrollPane.setViewportView(tree);
 		
 		HTMLPanel editor = new HTMLPanel();
-		editor.setHTMLFile("editor.html");
+		editor.setHTMLFile("editor-nojar.html");
 		editor.setBridge(new EditorBridge());
 		splitPane.setRightComponent(editor);
 	}
