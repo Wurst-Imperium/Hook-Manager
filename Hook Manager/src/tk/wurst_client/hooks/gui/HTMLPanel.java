@@ -119,7 +119,11 @@ public class HTMLPanel extends JPanel
 							State newState)
 						{
 							if(newState == State.SUCCEEDED)
+							{
 								task.run();
+								engine.getLoadWorker().stateProperty()
+									.removeListener(this);
+							}
 						}
 					});
 			}
