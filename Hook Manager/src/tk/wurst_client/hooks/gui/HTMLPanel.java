@@ -24,6 +24,7 @@ public class HTMLPanel extends JPanel
 {
 	private JFXPanel jfxPanel = new JFXPanel();
 	private WebEngine engine;
+	private Object bridge;
 	
 	/**
 	 * Create the panel.
@@ -71,7 +72,12 @@ public class HTMLPanel extends JPanel
 		});
 	}
 	
-	public <T> void setBridge(T bridge)
+	public Object getBridge()
+	{
+		return bridge;
+	}
+	
+	public void setBridge(Object bridge)
 	{
 		Platform.runLater(new Runnable()
 		{
@@ -82,6 +88,7 @@ public class HTMLPanel extends JPanel
 					bridge);
 			}
 		});
+		this.bridge = bridge;
 	}
 	
 	public Object executeScript(String script)
