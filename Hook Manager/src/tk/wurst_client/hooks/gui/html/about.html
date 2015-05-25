@@ -2,46 +2,40 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <style>
-    html {
-      font-family: "Verdana";
-    }
-    
-    h1 {
-      text-align: center;
-      border-bottom: 0.1em solid #000;
-    }
-    
-    #close {
-      position: fixed;
-      bottom: 1em;
-      width: 100%;
-      text-align: center;
-    }
-    
-    #close button {
-      padding: 0.25em 1em;
-    }
-  </style>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
-  <h1>About Hook Manager</h1>
-  <p id="version">
-  Hook Manager (unknown version)
-  <script>
-  	document.getElementById("version").innerHTML = "HookManager version " + window.java.getVersion();
-  </script>
-  </p>
-  <p>
-    Copyright &#169; 2015 | Alexander01998 | All rights reserved.
-  </p>
-  <p id="website">
-    <script>
-      document.getElementById("website").innerHTML = '<a href="#" onclick="java.openWebsite()">' + java.getWebsite() + '</a>';
-    </script>
-  </p>
-  <div id="close">
-    <button onclick="java.exit()">OK</button>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-8 col-xs-offset-2">
+       <img class="img-responsive" src="img/Hook-Manager.png">
+      </div>
+    </div>
+    <hr>
+    <p class="lead">
+      <span id="version">
+        Hook Manager (unknown version)
+      </span>
+      <br>
+      Copyright &#169; 2015 | Alexander01998 | All rights reserved.
+      <br>
+      Official website:
+      <a id="website" href="#" onclick="java.openWebsite()">(unknown)</a>
+    </p>
   </div>
+  <div style="position: fixed;bottom: 0;width: 100%;background-color: #eee;padding: 0.5em;">
+    <div class="container text-center">
+      <a class="btn btn-default" onclick="java.exit()">
+        OK
+      </a>
+    </div>
+  </div>
+  <script>
+  	$("#version").text("Hook Manager version " + java.getVersion());
+    $("#website").text(java.getWebsite());
+  </script>
 </body>
 </html>
