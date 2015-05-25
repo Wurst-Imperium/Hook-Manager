@@ -39,7 +39,7 @@ public class ClassDataReader extends ClassVisitor
 	public MethodVisitor visitMethod(int access, String name, String desc,
 		String signature, String[] exceptions)
 	{
-		classData.addMethod(name, new MethodData());
+		classData.addMethod(name + desc, new MethodData());
 		return super.visitMethod(access, name, desc, signature, exceptions);
 	}
 }
