@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class ClassData
 {	
-	HashMap<String, MethodData> methods = new HashMap<String, MethodData>();
+	private HashMap<String, MethodData> methods = new HashMap<String, MethodData>();
 	
 	public MethodData getMethod(String name)
 	{
