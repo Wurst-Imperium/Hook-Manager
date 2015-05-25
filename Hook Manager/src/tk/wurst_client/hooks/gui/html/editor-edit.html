@@ -15,7 +15,7 @@
   	  				java.showSelectClassMessage();
   	  				return;
   				}
-  				$("#content").html("");
+  				$("#loading").hide();
   				$("#content").append('<h1 class="page-header">' + java.getClassName() + "</h1>");
   				$("#content").append('<h2>Methods</h2>');
   				$("#content").append('<div id="methods" class="panel-group"></div>');
@@ -39,14 +39,14 @@
   </script>
 </head>
 <body>
-  <div class="section">
+  <div id="loading" class="section">
     <div class="section-center">
-      <div id="content" class="container-fluid">
         <p class="text-center lead">
           Loading...
         </p>
-      </div>
     </div>
+  </div>
+  <div id="content" class="container-fluid">
   </div>
 </body>
 </html>
