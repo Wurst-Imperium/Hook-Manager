@@ -12,6 +12,12 @@ import tk.wurst_client.hooks.reader.data.ClassData;
 public class EditorBridge
 {
 	private ClassData classData;
+	private HTMLPanel editor;
+	
+	public EditorBridge(HTMLPanel editor)
+	{
+		this.editor = editor;
+	}
 	
 	public void setClassData(ClassData classData)
 	{
@@ -25,5 +31,12 @@ public class EditorBridge
 				new String[classData.getMethodNames().size()]);
 		else
 			return null;
+	}
+	
+	public void showSelectClassMessage()
+	{
+		editor.setHTMLFile("editor-message.html");
+		editor.doWhenFinished(() -> editor
+			.executeScriptAsync("setMessage('Select a class to start injecting hooks.')"));
 	}
 }

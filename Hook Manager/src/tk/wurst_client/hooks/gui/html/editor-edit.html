@@ -12,7 +12,7 @@
 			try{
   				var methodNames = java.getMethodNames();
   				if(!$.isArray(methodNames)){
-  	  				$("p").html("Not a class.");
+  	  				java.showSelectClassMessage();
   	  				return;
   				}
   				var newHtml = '<div class="panel panel-default">'
@@ -22,7 +22,7 @@
         			newHtml += '<div class="list-group-item">' + methodNames[i].toString().replace("<", "&lt;") + "</div>";
         		}
         		newHtml += "</div></div>";
-  				$(".col-xs-12").html(newHtml);
+  				$("#content").html(newHtml);
         	}catch(e){
         		load();
         	}
@@ -35,7 +35,7 @@
 <body>
   <div class="section">
     <div class="section-center">
-  <div class="container-fluid">
+  <div id="content" class="container-fluid">
       <div class="row">
         <div class="col-xs-12" style="margin-top: 1em;">
           <p class="text-center lead">
