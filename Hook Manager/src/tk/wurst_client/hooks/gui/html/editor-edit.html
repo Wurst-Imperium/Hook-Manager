@@ -16,7 +16,7 @@
   	  				return;
   				}
   				var newHtml = '<div class="panel panel-default">'
-  					+ '<div class="panel-heading">(Class Name)</div>'
+  					+ '<div class="panel-heading">' + java.getClassName() + '</div>'
   					+ '<div class="list-group">';
         		for(i in methodNames){
         			newHtml += '<div class="list-group-item">' + methodNames[i].toString().replace("<", "&lt;") + "</div>";

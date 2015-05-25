@@ -277,7 +277,8 @@ public class MainFrame extends JFrame
 							+ ((DefaultMutableTreeNode)e.getPath()
 								.getPathComponent(i));
 				ClassData classData = settings.getClass(path);
-				editorBridge.setClassData(classData);
+				editorBridge.setClassData(
+					path.substring(path.lastIndexOf("/") + 1), classData);
 				editor.setHTMLFile("editor-edit.html");
 				editor.doWhenFinished(() -> editor.setBridge(editorBridge));
 			}

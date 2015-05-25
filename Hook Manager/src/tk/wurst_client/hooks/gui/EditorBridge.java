@@ -13,15 +13,22 @@ public class EditorBridge
 {
 	private ClassData classData;
 	private HTMLPanel editor;
+	private String className;
 	
 	public EditorBridge(HTMLPanel editor)
 	{
 		this.editor = editor;
 	}
 	
-	public void setClassData(ClassData classData)
+	public void setClassData(String className, ClassData classData)
 	{
+		this.className = className;
 		this.classData = classData;
+	}
+	
+	public String getClassName()
+	{
+		return className;
 	}
 	
 	public String[] getMethodNames()
