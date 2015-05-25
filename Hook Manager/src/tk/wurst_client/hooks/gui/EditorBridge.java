@@ -8,6 +8,9 @@
 package tk.wurst_client.hooks.gui;
 
 import tk.wurst_client.hooks.reader.data.ClassData;
+import tk.wurst_client.hooks.reader.data.HookData;
+import tk.wurst_client.hooks.reader.data.HookPosition;
+import tk.wurst_client.hooks.reader.data.MethodData;
 
 public class EditorBridge
 {
@@ -43,7 +46,26 @@ public class EditorBridge
 	public void showSelectClassMessage()
 	{
 		editor.setHTMLFile("editor-message.html");
-		editor.doWhenFinished(() -> editor
-			.executeScriptAsync("setMessage('Select a class to start injecting hooks.')"));
+		editor
+			.doWhenFinished(() -> editor
+				.executeScriptAsync("setMessage('Select a class to start injecting hooks.')"));
+	}
+	
+	public void toggleHook(String methodName, String position)
+	{
+		MethodData methodData = classData.getMethod(methodName);
+		HookPosition pos = HookPosition.valueOf(position);
+		if(methodData.hasHookAt(pos))
+			methodData.removeHook(pos);
+		else
+			methodData.addHook(pos, new HookData());
+	}
+	
+	public void toggleCollectParams(String methodName, String position)
+	{
+		HookData hook =
+			classData.getMethod(methodName).getHook(
+				HookPosition.valueOf(position));
+		hook.setCollectParams(!hook.collectsParams());
 	}
 }

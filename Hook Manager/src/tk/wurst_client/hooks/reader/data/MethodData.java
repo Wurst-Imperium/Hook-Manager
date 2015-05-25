@@ -28,4 +28,9 @@ public class MethodData
 	{
 		return hooks.remove(pos);
 	}
+
+	public boolean hasHookAt(HookPosition pos)
+	{
+		return hooks.containsKey(pos);
+	}
 }

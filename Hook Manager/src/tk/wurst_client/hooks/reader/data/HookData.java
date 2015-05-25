@@ -12,6 +12,11 @@ public class HookData
 	// TODO: Option for collecting only some parameters
 	private boolean collectParams;
 	
+	public HookData()
+	{
+		this(false);
+	}
+
 	public HookData(boolean collectParams)
 	{
 		this.collectParams = collectParams;
