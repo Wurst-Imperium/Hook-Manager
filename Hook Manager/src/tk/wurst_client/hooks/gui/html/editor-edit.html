@@ -15,14 +15,20 @@
   	  				java.showSelectClassMessage();
   	  				return;
   				}
-  				var newHtml = '<div class="panel panel-default">'
-  					+ '<div class="panel-heading">' + java.getClassName() + '</div>'
-  					+ '<div class="list-group">';
-        		for(i in methodNames){
-        			newHtml += '<div class="list-group-item">' + methodNames[i].toString().replace("<", "&lt;") + "</div>";
-        		}
-        		newHtml += "</div></div>";
-  				$("#content").html(newHtml);
+  				$("#content").html("");
+  				$("#content").append('<h1 class="page-header">' + java.getClassName() + "</h1>");
+  				$("#content").append('<h2>Methods</h2>');
+  				$("#content").append('<div id="methods" class="panel-group"></div>');
+  				$("#content").append('<h2>Fields</h2>');
+  				$("#content").append('<code>// TODO: Show fields</code>');
+  				$.get("editor-method-template.html", function(a, b){
+  					var template = a;
+            		for(i in methodNames){
+            			$("#methods").append(template
+            				.replace(/{{name}}/g, methodNames[i].toString().replace("<", "&lt;"))
+            				.replace(/{{id}}/g, i));
+            		}
+  				});
         	}catch(e){
         		load();
         	}
@@ -35,16 +41,12 @@
 <body>
   <div class="section">
     <div class="section-center">
-  <div id="content" class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12" style="margin-top: 1em;">
-          <p class="text-center lead">
-            Loading...
-          </p>
-        </div>
+      <div id="content" class="container-fluid">
+        <p class="text-center lead">
+          Loading...
+        </p>
       </div>
-  </div>
-      </div>
+    </div>
   </div>
 </body>
 </html>

@@ -17,7 +17,11 @@ html, body {
     vertical-align: middle;
   }
   
-  kbd {
+  .clickable {
+    cursor: pointer;
+  }
+  
+  code, kbd {
     color: #444;
     background-color: #eee;
     border: 1px solid #ddd;
