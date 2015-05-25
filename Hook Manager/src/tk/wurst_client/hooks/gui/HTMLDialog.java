@@ -41,6 +41,7 @@ public class HTMLDialog extends JDialog
 	public HTMLDialog(Component parent)
 	{
 		setSize(640, 480);
+		setModal(true);
 		setLocationRelativeTo(parent);
 		getContentPane().setLayout(new BorderLayout());
 		{
