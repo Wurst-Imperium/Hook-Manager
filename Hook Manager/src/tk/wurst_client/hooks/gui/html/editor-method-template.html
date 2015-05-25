@@ -8,9 +8,29 @@
     <div class="panel-body">
       <pre>{{name}}
 {
-    <a class="btn btn-xs btn-default">Inject Hook</a>
+    <span id="hook-{{id}}-start"><!--
+   --><a class="hook-button btn btn-success btn-xs" onclick="toggleHook('hook-{{id}}-start', '{{name}}', 'METHOD_START');"><!--
+     -->Inject Hook<!--
+   --></a><!--
+   --><span class="hook hidden"><!--
+     -->HookManager.hook("{{name}}|start");<!--
+     --><a class="btn btn-danger btn-xs" onclick="toggleHook('hook-{{id}}-start', '{{name}}', 'METHOD_START');" style="float: none"><!--
+       -->Remove Hook<!--
+     --></a><!--
+   --></span><!--
+ --></span>
     doStuff();
-    <a class="btn btn-xs btn-default">Inject Hook</a>
+    <span id="hook-{{id}}-end"><!--
+   --><a class="hook-button btn btn-success btn-xs" onclick="toggleHook('hook-{{id}}-end', '{{name}}', 'METHOD_END');"><!--
+     -->Inject Hook<!--
+   --></a><!--
+   --><span class="hook hidden"><!--
+     -->HookManager.hook("{{name}}|end");<!--
+     --><a class="btn btn-danger btn-xs" onclick="toggleHook('hook-{{id}}-end', '{{name}}', 'METHOD_END');" style="float: none"><!--
+       -->Remove Hook<!--
+     --></a><!--
+   --></span><!--
+ --></span>
 }</pre>
     </div>
   </div>

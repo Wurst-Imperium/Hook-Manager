@@ -36,6 +36,11 @@
     }
     
   	$(document).ready(load());
+  	
+  	function toggleHook(id, method, pos){
+  		java.toggleHook(method, pos);
+  		$("#" + id + " .hook-button, #" + id + " .hook").toggleClass("hidden");
+  	}
   </script>
 </head>
 <body>
