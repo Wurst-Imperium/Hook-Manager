@@ -79,7 +79,7 @@ public class MainFrame extends JFrame
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("/tk/wurst_client/hooks/icon.png")));
 		setMinimumSize(new Dimension(1024, 640));
 		setLocationByPlatform(true);
-		setTitle("HookManager");
+		setTitle("HookManager v" + Constants.VERSION);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
