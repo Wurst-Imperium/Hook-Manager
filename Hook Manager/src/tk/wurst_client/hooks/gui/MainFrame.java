@@ -29,6 +29,7 @@ import tk.wurst_client.hooks.reader.data.JarData;
 import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
 import tk.wurst_client.update.Updater;
+import java.awt.Toolkit;
 
 public class MainFrame extends JFrame
 {
@@ -75,7 +76,8 @@ public class MainFrame extends JFrame
 	 */
 	public MainFrame()
 	{
-		setMinimumSize(new Dimension(600, 360));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("/tk/wurst_client/hooks/icon.png")));
+		setMinimumSize(new Dimension(1024, 640));
 		setLocationByPlatform(true);
 		setTitle("HookManager");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
