@@ -68,7 +68,8 @@ public class JarDataReader
 					entry.getName()
 						.substring(0, entry.getName().lastIndexOf("/"))
 						.replace("/", ".")).add(
-					new DefaultMutableTreeNode(entry, false));
+					new DefaultMutableTreeNode(entry.getName().substring(
+						entry.getName().lastIndexOf("/") + 1), false));
 			else
 				root.add(new DefaultMutableTreeNode(entry, false));
 		input.close();
