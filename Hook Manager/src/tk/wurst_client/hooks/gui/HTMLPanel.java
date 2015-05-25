@@ -28,6 +28,7 @@ public class HTMLPanel extends JPanel
 	private JFXPanel jfxPanel = new JFXPanel();
 	private WebEngine engine;
 	private Object bridge;
+	private String htmlFile;
 	
 	/**
 	 * Create the panel.
@@ -49,6 +50,11 @@ public class HTMLPanel extends JPanel
 		add(jfxPanel);
 	}
 	
+	public String getHTMLFile()
+	{
+		return htmlFile;
+	}
+
 	public void setHTMLFile(String filename)
 	{
 		Platform.runLater(new Runnable()
@@ -61,6 +67,7 @@ public class HTMLPanel extends JPanel
 					.toExternalForm());
 			}
 		});
+		htmlFile = filename;
 	}
 	
 	public void setHTML(String html)
