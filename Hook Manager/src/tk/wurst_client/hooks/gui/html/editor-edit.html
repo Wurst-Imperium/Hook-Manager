@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/editor.css" rel="stylesheet">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script>
+    function load(){
+    	window.setTimeout(function(){
+			try{
+  				var methodNames = java.getMethodNames();
+  				if(!$.isArray(methodNames)){
+  	  				java.showSelectClassMessage();
+  	  				return;
+  				}
+  				$("#loading").hide();
+  				$("#content").append('<h1 class="page-header">' + java.getClassName() + "</h1>");
+  				$("#content").append('<h2>Methods</h2>');
+  				$("#content").append('<div id="methods" class="panel-group"></div>');
+  				$("#content").append('<h2>Fields</h2>');
+  				$("#content").append('<code>// TODO: Show fields</code>');
+  				$.get("editor-method-template.html", function(a, b){
+  					var template = a;
+            		for(i in methodNames){
+            			$("#methods").append(template
+            				.replace(/{{name}}/g, methodNames[i].toString().replace("<", "&lt;"))
+            				.replace(/{{id}}/g, i));
+            			if(java.hasHookAt(methodNames[i], "METHOD_START"))
+            				toggleHookButtons("hook-" + i + "-start", methodNames[i], "METHOD_START");
+            			if(java.hasHookAt(methodNames[i], "METHOD_END"))
+            				toggleHookButtons("hook-" + i + "-end", methodNames[i], "METHOD_END");
+            		}
+  				});
+        	}catch(e){
+        		load();
+        	}
+  		}, 1);
+    }
+    
+  	$(document).ready(load());
+  	
+  	function toggleHook(id, method, pos){
+  		java.toggleHook(method, pos);
+  		$("#" + id + " .hook-button, #" + id + " .hook").toggleClass("hidden");
+  	}
+  	
+  	function toggleHookButtons(id, method, pos){
+  		$("#" + id + " .hook-button, #" + id + " .hook").toggleClass("hidden");
+  	}
+  </script>
+</head>
+<body>
+  <div id="loading" class="section">
+    <div class="section-center">
+        <p class="text-center lead">
+          Loading...
+        </p>
+    </div>
+  </div>
+  <div id="content" class="container-fluid">
+  </div>
+</body>
+</html>

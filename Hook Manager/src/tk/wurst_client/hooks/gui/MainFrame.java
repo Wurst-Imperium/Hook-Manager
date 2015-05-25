@@ -18,10 +18,13 @@ import java.io.IOException;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import tk.wurst_client.hooks.reader.JarDataReader;
+import tk.wurst_client.hooks.reader.data.ClassData;
 import tk.wurst_client.hooks.reader.data.JarData;
 import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
@@ -32,6 +35,8 @@ public class MainFrame extends JFrame
 	private JTree tree;
 	private JarDataReader jarDataReader;
 	private JarData settings;
+	private HTMLPanel editor;
+	private EditorBridge editorBridge;
 	
 	/**
 	 * Launch the application.
@@ -84,7 +89,8 @@ public class MainFrame extends JFrame
 		
 		JMenuItem mntmOpenInputJar = new JMenuItem("Open Input Jar...");
 		mntmOpenInputJar.setMnemonic(KeyEvent.VK_O);
-		mntmOpenInputJar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+		mntmOpenInputJar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+			InputEvent.CTRL_MASK));
 		mntmOpenInputJar.addActionListener(new ActionListener()
 		{
 			@Override
@@ -98,7 +104,9 @@ public class MainFrame extends JFrame
 				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
 					try
 					{
-						settings = jarDataReader.read(fileChooser.getSelectedFile());
+						settings =
+							jarDataReader.read(fileChooser.getSelectedFile());
+						editorBridge.showSelectClassMessage();
 					}catch(IOException e1)
 					{
 						e1.printStackTrace();
@@ -255,12 +263,41 @@ public class MainFrame extends JFrame
 		splitPane.setLeftComponent(scrollPane);
 		
 		tree = new JTree(new DefaultMutableTreeNode());
+		tree.addTreeSelectionListener(new TreeSelectionListener()
+		{
+			@Override
+			public void valueChanged(TreeSelectionEvent e)
+			{
+				String path =
+					((DefaultMutableTreeNode)e.getPath().getPathComponent(1))
+						.toString().replace(".", "/");
+				for(int i = 2; i < e.getPath().getPath().length; i++)
+					path +=
+						"/"
+							+ ((DefaultMutableTreeNode)e.getPath()
+								.getPathComponent(i));
+				ClassData classData = settings.getClass(path);
+				editorBridge.setClassData(
+					path.substring(path.lastIndexOf("/") + 1), classData);
+				editor.setHTMLFile("editor-edit.html");
+				editor.doWhenFinished(() -> editor.setBridge(editorBridge));
+			}
+		});
 		jarDataReader = new JarDataReader(tree);
 		scrollPane.setViewportView(tree);
 		
-		HTMLPanel editor = new HTMLPanel();
-		editor.setHTMLFile("editor-nojar.html");
-		editor.setBridge(new EditorBridge());
+		editor = new HTMLPanel();
+		editor.setHTMLFile("editor-message.html");
+		editorBridge = new EditorBridge(editor);
+		editor.doWhenFinished(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				editor
+					.executeScriptAsync("$(document).ready(function(){setMessage('Press <kbd>Ctrl+O</kbd> to open a Jar.');});");
+			}
+		});
 		splitPane.setRightComponent(editor);
 	}
 }

@@ -11,20 +11,26 @@ import java.util.HashMap;
 
 public class MethodData
 {
-	HashMap<String, HookData> hooks = new HashMap<String, HookData>();
+	private HashMap<HookPosition, HookData> hooks =
+		new HashMap<HookPosition, HookData>();
 	
-	public HookData getHook(String name)
+	public HookData getHook(HookPosition pos)
 	{
-		return hooks.get(name);
+		return hooks.get(pos);
 	}
 	
-	public HookData addHook(String name, HookData data)
+	public HookData addHook(HookPosition pos, HookData data)
 	{
-		return hooks.put(name, data);
+		return hooks.put(pos, data);
 	}
 	
-	public HookData removeHook(String name)
+	public HookData removeHook(HookPosition pos)
 	{
-		return hooks.remove(name);
+		return hooks.remove(pos);
+	}
+
+	public boolean hasHookAt(HookPosition pos)
+	{
+		return hooks.containsKey(pos);
 	}
 }

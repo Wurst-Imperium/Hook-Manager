@@ -10,6 +10,9 @@ package tk.wurst_client.hooks.gui;
 import java.awt.GridLayout;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
@@ -24,6 +27,8 @@ public class HTMLPanel extends JPanel
 {
 	private JFXPanel jfxPanel = new JFXPanel();
 	private WebEngine engine;
+	private Object bridge;
+	private String htmlFile;
 	
 	/**
 	 * Create the panel.
@@ -45,6 +50,11 @@ public class HTMLPanel extends JPanel
 		add(jfxPanel);
 	}
 	
+	public String getHTMLFile()
+	{
+		return htmlFile;
+	}
+
 	public void setHTMLFile(String filename)
 	{
 		Platform.runLater(new Runnable()
@@ -57,6 +67,7 @@ public class HTMLPanel extends JPanel
 					.toExternalForm());
 			}
 		});
+		htmlFile = filename;
 	}
 	
 	public void setHTML(String html)
@@ -71,7 +82,12 @@ public class HTMLPanel extends JPanel
 		});
 	}
 	
-	public <T> void setBridge(T bridge)
+	public Object getBridge()
+	{
+		return bridge;
+	}
+	
+	public void setBridge(Object bridge)
 	{
 		Platform.runLater(new Runnable()
 		{
@@ -82,10 +98,42 @@ public class HTMLPanel extends JPanel
 					bridge);
 			}
 		});
+		this.bridge = bridge;
 	}
 	
 	public Object executeScript(String script)
 	{
 		return engine.executeScript(script);
+	}
+	
+	public void executeScriptAsync(String script)
+	{
+		Platform.runLater(() -> executeScript(script));
+	}
+	
+	public void doWhenFinished(Runnable task)
+	{
+		Platform.runLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				engine.getLoadWorker().stateProperty()
+					.addListener(new ChangeListener<State>()
+					{
+						@Override
+						public void changed(ObservableValue ov, State oldState,
+							State newState)
+						{
+							if(newState == State.SUCCEEDED)
+							{
+								task.run();
+								engine.getLoadWorker().stateProperty()
+									.removeListener(this);
+							}
+						}
+					});
+			}
+		});
 	}
 }
