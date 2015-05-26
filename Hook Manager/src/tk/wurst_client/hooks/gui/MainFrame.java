@@ -10,6 +10,7 @@ package tk.wurst_client.hooks.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -29,7 +30,6 @@ import tk.wurst_client.hooks.reader.data.JarData;
 import tk.wurst_client.hooks.util.Constants;
 import tk.wurst_client.hooks.util.Util;
 import tk.wurst_client.update.Updater;
-import java.awt.Toolkit;
 
 public class MainFrame extends JFrame
 {
@@ -76,7 +76,8 @@ public class MainFrame extends JFrame
 	 */
 	public MainFrame()
 	{
-		setIconImage(Toolkit.getDefaultToolkit().getImage(MainFrame.class.getResource("/tk/wurst_client/hooks/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(
+			MainFrame.class.getResource("/tk/wurst_client/hooks/icon.png")));
 		setMinimumSize(new Dimension(1024, 640));
 		setLocationByPlatform(true);
 		setTitle("HookManager v" + Constants.VERSION);
@@ -270,14 +271,18 @@ public class MainFrame extends JFrame
 			@Override
 			public void valueChanged(TreeSelectionEvent e)
 			{
-				String path =
-					((DefaultMutableTreeNode)e.getPath().getPathComponent(1))
-						.toString().replace(".", "/");
-				for(int i = 2; i < e.getPath().getPath().length; i++)
-					path +=
-						"/"
-							+ ((DefaultMutableTreeNode)e.getPath()
-								.getPathComponent(i));
+				String path = "";
+				try
+				{
+					path =
+						((DefaultMutableTreeNode)e.getPath()
+							.getPathComponent(1)).toString().replace(".", "/");
+					for(int i = 2; i < e.getPath().getPath().length; i++)
+						path += "/" + e.getPath().getPathComponent(i);
+				}catch(IllegalArgumentException e1)
+				{	
+					
+				}
 				ClassData classData = settings.getClass(path);
 				editorBridge.setClassData(
 					path.substring(path.lastIndexOf("/") + 1), classData);
