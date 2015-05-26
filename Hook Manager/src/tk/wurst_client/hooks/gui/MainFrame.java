@@ -119,6 +119,22 @@ public class MainFrame extends JFrame
 		mnFile.add(mntmOpenInputJar);
 		
 		JMenuItem mntmSaveHookedJar = new JMenuItem("Save Hooked Jar...");
+		mntmSaveHookedJar.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				JFileChooser fileChooser = new JFileChooser(".");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				fileChooser.setFileFilter(new FileNameExtensionFilter(
+					"Jar file", "jar"));
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
+				{
+					// TODO: Save Jar
+				}
+			}
+		});
 		mnFile.add(mntmSaveHookedJar);
 		
 		JSeparator separator_1 = new JSeparator();
