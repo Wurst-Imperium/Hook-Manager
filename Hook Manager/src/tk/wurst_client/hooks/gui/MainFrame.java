@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import tk.wurst_client.hooks.injector.JarHookInjector;
 import tk.wurst_client.hooks.reader.JarDataReader;
 import tk.wurst_client.hooks.reader.data.ClassData;
 import tk.wurst_client.hooks.reader.data.JarData;
@@ -38,6 +40,7 @@ public class MainFrame extends JFrame
 	private JarData settings;
 	private HTMLPanel editor;
 	private EditorBridge editorBridge;
+	private File inputFile;
 	
 	/**
 	 * Launch the application.
@@ -104,11 +107,11 @@ public class MainFrame extends JFrame
 				fileChooser.setFileFilter(new FileNameExtensionFilter(
 					"Jar file", "jar"));
 				fileChooser.setAcceptAllFileFilterUsed(false);
-				if(fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
+				if(fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION)
 					try
 					{
-						settings =
-							jarDataReader.read(fileChooser.getSelectedFile());
+						inputFile = fileChooser.getSelectedFile();
+						settings = jarDataReader.read(inputFile);
 						editorBridge.showSelectClassMessage();
 					}catch(IOException e1)
 					{
@@ -133,9 +136,14 @@ public class MainFrame extends JFrame
 					"Jar file", "jar"));
 				fileChooser.setAcceptAllFileFilterUsed(false);
 				if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
-				{
-					// TODO: Save Jar
-				}
+					try
+					{
+						new JarHookInjector().injectHooks(inputFile,
+							fileChooser.getSelectedFile(), settings);
+					}catch(IOException e1)
+					{
+						e1.printStackTrace();
+					}
 			}
 		});
 		mnFile.add(mntmSaveHookedJar);
