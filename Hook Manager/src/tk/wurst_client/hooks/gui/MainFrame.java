@@ -119,6 +119,9 @@ public class MainFrame extends JFrame
 		mnFile.add(mntmOpenInputJar);
 		
 		JMenuItem mntmSaveHookedJar = new JMenuItem("Save Hooked Jar...");
+		mntmSaveHookedJar.setMnemonic(KeyEvent.VK_J);
+		mntmSaveHookedJar.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_J,
+			InputEvent.CTRL_MASK));
 		mntmSaveHookedJar.addActionListener(new ActionListener()
 		{
 			@Override
