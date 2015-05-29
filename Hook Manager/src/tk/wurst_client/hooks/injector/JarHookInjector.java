@@ -56,11 +56,8 @@ public class JarHookInjector
 				ClassData classData =
 					settings.getClass(entry.getName().substring(0,
 						entry.getName().length() - 6));
-				if(classData.hasHooks())
-					System.out.println(entry.getName());
-				// TODO: Inject hooks based on settings
 				ClassHookInjector hookInjector =
-					new ClassHookInjector(Opcodes.ASM4, writer);
+					new ClassHookInjector(Opcodes.ASM4, writer, classData);
 				reader.accept(hookInjector, 0);
 				output.write(writer.toByteArray());
 				output.closeEntry();
