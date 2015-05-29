@@ -10,48 +10,60 @@ package tk.wurst_client.hooks.injector;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import tk.wurst_client.hooks.reader.data.HookPosition;
+import tk.wurst_client.hooks.reader.data.MethodData;
+
 public class MethodHookInjector extends MethodVisitor
 {
 	private String methodName;
 	private String className;
+	private MethodData methodData;
 	
-	public MethodHookInjector(int api, MethodVisitor mv, String className,
-		String methodName)
+	public MethodHookInjector(int api, MethodVisitor mv, MethodData methodData,
+		String className, String methodName)
 	{
 		super(api, mv);
 		this.methodName = methodName;
 		this.className = className;
+		this.methodData = methodData;
 	}
 	
 	@Override
 	public void visitCode()
 	{
 		super.visitCode();
-		super.visitLdcInsn(className + "." + methodName + "|start");
-		super.visitMethodInsn(Opcodes.INVOKESTATIC,
-			"tk/wurst_client/hooks/HookManager" /* TODO: Custom class path */,
-			"hook", "(Ljava/lang/String;)V", false);
+		if(methodData.hasHookAt(HookPosition.METHOD_START))
+		{
+			super.visitLdcInsn(className + "." + methodName + "|start");
+			// TODO: Custom class path
+			super.visitMethodInsn(Opcodes.INVOKESTATIC,
+				"tk/wurst_client/hooks/HookManager", "hook",
+				"(Ljava/lang/String;)V", false);
+		}
 	}
 	
 	@Override
 	public void visitInsn(int opcode)
 	{
-		switch(opcode)
+		if(methodData.hasHookAt(HookPosition.METHOD_END))
 		{
-			case Opcodes.ARETURN:
-			case Opcodes.DRETURN:
-			case Opcodes.FRETURN:
-			case Opcodes.IRETURN:
-			case Opcodes.LRETURN:
-			case Opcodes.RETURN:
-				super.visitLdcInsn(className + "." + methodName + "|end");
-				super.visitMethodInsn(Opcodes.INVOKESTATIC,
-					"tk/wurst_client/hooks/HookManager"
-					/* TODO: Custom class path */, "hook",
-					"(Ljava/lang/String;)V", false);
-				break;
-			default:
-				break;
+			switch(opcode)
+			{
+				case Opcodes.ARETURN:
+				case Opcodes.DRETURN:
+				case Opcodes.FRETURN:
+				case Opcodes.IRETURN:
+				case Opcodes.LRETURN:
+				case Opcodes.RETURN:
+					super.visitLdcInsn(className + "." + methodName + "|end");
+					// TODO: Custom class path
+					super.visitMethodInsn(Opcodes.INVOKESTATIC,
+						"tk/wurst_client/hooks/HookManager", "hook",
+						"(Ljava/lang/String;)V", false);
+					break;
+				default:
+					break;
+			}
 		}
 		super.visitInsn(opcode);
 	}
