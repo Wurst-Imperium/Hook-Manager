@@ -37,7 +37,7 @@ public class MethodData
 		return hooks.remove(pos);
 	}
 
-	public boolean hasHooks(HookPosition pos)
+	public boolean hasHooks()
 	{
 		return !hooks.isEmpty();
 	}
