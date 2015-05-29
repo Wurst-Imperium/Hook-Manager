@@ -38,11 +38,11 @@ public class MethodHookInjector extends MethodVisitor
 	{
 		switch(opcode)
 		{
-			case Opcodes.IRETURN:
-			case Opcodes.FRETURN:
 			case Opcodes.ARETURN:
-			case Opcodes.LRETURN:
 			case Opcodes.DRETURN:
+			case Opcodes.FRETURN:
+			case Opcodes.IRETURN:
+			case Opcodes.LRETURN:
 			case Opcodes.RETURN:
 				super.visitLdcInsn(className + "." + methodName + "|end");
 				super.visitMethodInsn(Opcodes.INVOKESTATIC,
