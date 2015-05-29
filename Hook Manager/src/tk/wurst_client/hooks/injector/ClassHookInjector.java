@@ -40,7 +40,7 @@ public class ClassHookInjector extends ClassVisitor
 
 		MethodVisitor mv =
 			super.visitMethod(access, name, desc, signature, exceptions);
-		if(classData.hasHooks())
+		if(classData.hasHooks() && classData.getMethod(name + desc).hasHooks())
 		{
 			MethodHookInjector mvw =
 				new MethodHookInjector(api, mv, className, name);
