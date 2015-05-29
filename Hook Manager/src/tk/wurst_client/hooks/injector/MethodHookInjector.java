@@ -15,7 +15,8 @@ public class MethodHookInjector extends MethodVisitor
 	private String methodName;
 	private String className;
 	
-	public MethodHookInjector(int api, MethodVisitor mv, String className, String methodName)
+	public MethodHookInjector(int api, MethodVisitor mv, String className,
+		String methodName)
 	{
 		super(api, mv);
 		this.methodName = methodName;
@@ -30,5 +31,28 @@ public class MethodHookInjector extends MethodVisitor
 		super.visitMethodInsn(Opcodes.INVOKESTATIC,
 			"tk/wurst_client/hooks/HookManager" /* TODO: Custom class path */,
 			"hook", "(Ljava/lang/String;)V", false);
+	}
+	
+	@Override
+	public void visitInsn(int opcode)
+	{
+		switch(opcode)
+		{
+			case Opcodes.IRETURN:
+			case Opcodes.FRETURN:
+			case Opcodes.ARETURN:
+			case Opcodes.LRETURN:
+			case Opcodes.DRETURN:
+			case Opcodes.RETURN:
+				super.visitLdcInsn(className + "." + methodName);
+				super.visitMethodInsn(Opcodes.INVOKESTATIC,
+					"tk/wurst_client/hooks/HookManager"
+					/* TODO: Custom class path */, "hook",
+					"(Ljava/lang/String;)V", false);
+				break;
+			default:
+				break;
+		}
+		super.visitInsn(opcode);
 	}
 }
