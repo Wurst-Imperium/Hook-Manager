@@ -27,7 +27,7 @@ public class MethodHookInjector extends MethodVisitor
 	public void visitCode()
 	{
 		super.visitCode();
-		super.visitLdcInsn(className + "." + methodName);
+		super.visitLdcInsn(className + "." + methodName + "|start");
 		super.visitMethodInsn(Opcodes.INVOKESTATIC,
 			"tk/wurst_client/hooks/HookManager" /* TODO: Custom class path */,
 			"hook", "(Ljava/lang/String;)V", false);
@@ -44,7 +44,7 @@ public class MethodHookInjector extends MethodVisitor
 			case Opcodes.LRETURN:
 			case Opcodes.DRETURN:
 			case Opcodes.RETURN:
-				super.visitLdcInsn(className + "." + methodName);
+				super.visitLdcInsn(className + "." + methodName + "|end");
 				super.visitMethodInsn(Opcodes.INVOKESTATIC,
 					"tk/wurst_client/hooks/HookManager"
 					/* TODO: Custom class path */, "hook",
