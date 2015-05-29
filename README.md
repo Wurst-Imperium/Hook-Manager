@@ -1,6 +1,6 @@
 # Hook Manager [![latest release](https://img.shields.io/github/release/Wurst-Imperium/Hook-Manager.svg?label=latest%20release)](https://github.com/Wurst-Imperium/Hook-Manager/releases/latest) [![](https://img.shields.io/github/license/Wurst-Imperium/Hook-Manager.svg)](https://github.com/Wurst-Imperium/Hook-Manager/blob/master/LICENSE)
 
-Modify Java files. Any Java files!
+:coffee: Java modding at its best.
 
 ## The problem with deobfuscation
 All Java deobfuscation tools have one thing in common: They produce **a ton** of errors.
