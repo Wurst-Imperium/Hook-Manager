@@ -10,15 +10,19 @@ package tk.wurst_client.hooks.injector;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 
+import tk.wurst_client.hooks.reader.data.ClassData;
+
 public class ClassHookInjector extends ClassVisitor
 {
 	private int api;
 	private String className;
+	private ClassData classData;
 
-	public ClassHookInjector(int api, ClassVisitor cv)
+	public ClassHookInjector(int api, ClassVisitor cv, ClassData classData)
 	{
 		super(api, cv);
 		this.api = api;
+		this.classData = classData;
 	}
 
 	@Override
@@ -36,8 +40,9 @@ public class ClassHookInjector extends ClassVisitor
 
 		MethodVisitor mv =
 			super.visitMethod(access, name, desc, signature, exceptions);
-		MethodHookInjector mvw =
-			new MethodHookInjector(api, mv, className, name);
-		return mvw;
+		if(classData.hasHooks() && classData.getMethod(name + desc).hasHooks())
+			return new MethodHookInjector(api, mv, classData.getMethod(name + desc), className, name);
+		else
+			return mv;
 	}
 }

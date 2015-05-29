@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class ClassData
-{	
-	private HashMap<String, MethodData> methods = new HashMap<String, MethodData>();
+{
+	private HashMap<String, MethodData> methods =
+		new HashMap<String, MethodData>();
+	private int hooks;
 	
 	public MethodData getMethod(String name)
 	{
@@ -28,9 +30,24 @@ public class ClassData
 	{
 		return methods.remove(name);
 	}
-
+	
 	public Set<String> getMethodNames()
 	{
 		return methods.keySet();
+	}
+	
+	public boolean hasHooks()
+	{
+		return hooks > 0;
+	}
+	
+	protected void addHook()
+	{
+		hooks++;
+	}
+	
+	protected void removeHook()
+	{
+		hooks--;
 	}
 }

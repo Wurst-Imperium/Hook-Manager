@@ -13,7 +13,13 @@ public class MethodData
 {
 	private HashMap<HookPosition, HookData> hooks =
 		new HashMap<HookPosition, HookData>();
+	private ClassData parent;
 	
+	public MethodData(ClassData parent)
+	{
+		this.parent = parent;
+	}
+
 	public HookData getHook(HookPosition pos)
 	{
 		return hooks.get(pos);
@@ -21,12 +27,19 @@ public class MethodData
 	
 	public HookData addHook(HookPosition pos, HookData data)
 	{
+		parent.addHook();
 		return hooks.put(pos, data);
 	}
 	
 	public HookData removeHook(HookPosition pos)
 	{
+		parent.removeHook();
 		return hooks.remove(pos);
+	}
+
+	public boolean hasHooks()
+	{
+		return !hooks.isEmpty();
 	}
 
 	public boolean hasHookAt(HookPosition pos)
