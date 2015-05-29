@@ -50,4 +50,9 @@ public class ClassData
 	{
 		hooks--;
 	}
+
+	public boolean hasMethod(String name)
+	{
+		return methods.containsKey(name);
+	}
 }
