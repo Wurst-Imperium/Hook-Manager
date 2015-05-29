@@ -1,28 +1,17 @@
-﻿$(document).ready(function()
+$(document).ready(function()
 {
-	$('a[href*=#]:not([href=#])').click(function()
+  $('a[href*=#]').click(function(e)
 	{
-		if(location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname)
+    if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '')
+			&& location.hostname == this.hostname)
 		{
-			var target = $(this.hash);
-			target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-			if(target.length)
+      var href = $(this).attr("href"),
+        offsetTop = href === "#" ? 0 : $(href).offset().top;
+      $('html, body').stop().animate(
 			{
-				$('html, body').animate(
-				{
-					scrollTop: target.offset().top
-				}, 1500);
-			}
-		}
-	});
-	$('a[href=#]').click(function()
-	{
-		if(location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname)
-		{
-			$('html, body').animate(
-			{
-				scrollTop: 0
-			}, 1500);
-		}
-	});
+        scrollTop: offsetTop
+      }, 750);
+      e.preventDefault();
+    }
+  });
 });
