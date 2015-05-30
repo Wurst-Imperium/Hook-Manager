@@ -1,2 +1,2 @@
 # Hook Manager website
-https://hook-manager.tk/
+https://www.hook-manager.tk/
