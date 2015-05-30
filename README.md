@@ -1,2 +1,2 @@
 # Hook Manager website
-https://hooks.wurst-client.tk/
+https://hook-manager.tk/
