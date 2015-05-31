@@ -43,11 +43,20 @@
   	
   	function toggleHook(id, method, pos){
   		java.toggleHook(method, pos);
-  		$("#" + id + " .hook-button, #" + id + " .hook").toggleClass("hidden");
+  		toggleHookButtons(id, method, pos);
   	}
   	
   	function toggleHookButtons(id, method, pos){
   		$("#" + id + " .hook-button, #" + id + " .hook").toggleClass("hidden");
+		var badge = $("#method-" + id.split("-")[1] + " .badge");
+  		if($("#" + id + " .hook-button").hasClass("hidden")){
+  			badge.text(Number(badge.text()) + 1);
+  			badge.removeClass("hidden");
+  		}else{
+  			badge.text(Number(badge.text()) - 1);
+  			if(badge.text() === "0")
+  				badge.addClass("hidden");
+  		}
   	}
   </script>
 </head>
