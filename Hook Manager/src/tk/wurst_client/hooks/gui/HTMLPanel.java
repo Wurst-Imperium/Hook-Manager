@@ -8,6 +8,7 @@
 package tk.wurst_client.hooks.gui;
 
 import java.awt.GridLayout;
+import java.io.File;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -54,7 +55,7 @@ public class HTMLPanel extends JPanel
 	{
 		return htmlFile;
 	}
-
+	
 	public void setHTMLFile(String filename)
 	{
 		Platform.runLater(new Runnable()
@@ -62,9 +63,13 @@ public class HTMLPanel extends JPanel
 			@Override
 			public void run()
 			{
-				engine.load(getClass().getClassLoader()
-					.getResource(Constants.Resources.HTML_DIR + filename)
-					.toExternalForm());
+				String url;
+				url =
+					getClass().getClassLoader()
+						.getResource(Constants.Resources.HTML_DIR + filename)
+						.toExternalForm()
+						.replace("rsrc:", new File(".").toURI().toString());
+				engine.load(url);
 			}
 		});
 		htmlFile = filename;
