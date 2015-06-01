@@ -63,7 +63,11 @@ public class MainFrame extends JFrame
 							+ updater.getLatestVersion() + " is available.\n"
 							+ "Would you like to update?", "Update Available",
 							JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
-							updater.update();
+						{
+							Util.openInBrowser(Constants.URLs.GITHUB_PAGE
+								+ "/releases/latest");
+							System.exit(0);
+						}
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
 				}catch(Exception e)

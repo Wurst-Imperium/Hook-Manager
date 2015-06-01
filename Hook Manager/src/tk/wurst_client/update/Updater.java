@@ -172,8 +172,13 @@ public class Updater
 			return false;
 	}
 	
+	/**
+	 * @deprecated Does not automatically install updates, just downloads them
+	 *             and puts them next to the Jar.
+	 */
 	public void update()
 	{
+		// TODO: Fix auto-installation of updates.
 		new Thread(new Runnable()
 		{
 			@Override
