@@ -15,7 +15,7 @@ public final class Constants
 	{
 		public static final String GITHUB_PAGE =
 			"https://github.com/Wurst-Imperium/Hook-Manager";
-		public static final String WEBSITE = "https://hooks.wurst-client.tk/";
+		public static final String WEBSITE = "https://www.hook-manager.tk/";
 		
 		public static final String BUGS = GITHUB_PAGE + "/labels/bug";
 		public static final String CONTRIBUTE = GITHUB_PAGE + "/fork";
