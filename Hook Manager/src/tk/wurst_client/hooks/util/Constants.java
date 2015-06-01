@@ -28,6 +28,6 @@ public final class Constants
 	
 	public static final class Resources
 	{
-		public static final String HTML_DIR = "tk/wurst_client/hooks/gui/html/";
+		public static final String HTML_DIR = "html/";
 	}
 }
