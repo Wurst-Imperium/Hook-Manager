@@ -1,6 +1,6 @@
-# Hook Manager [![latest release](https://img.shields.io/github/release/Wurst-Imperium/Hook-Manager.svg?label=latest%20release)](https://github.com/Wurst-Imperium/Hook-Manager/releases/latest) [![](https://img.shields.io/github/license/Wurst-Imperium/Hook-Manager.svg)](https://github.com/Wurst-Imperium/Hook-Manager/blob/master/LICENSE)
-
+# Hook Manager [![latest release](https://img.shields.io/github/release/Wurst-Imperium/Hook-Manager.svg?label=latest%20release)](https://github.com/Wurst-Imperium/Hook-Manager/releases/latest) [![](https://img.shields.io/github/license/Wurst-Imperium/Hook-Manager.svg)](https://github.com/Wurst-Imperium/Hook-Manager/blob/master/LICENSE) [![analytics](https://img.shields.io/badge/analytics-GA-blue.svg)](https://github.com/igrigorik/ga-beacon)
 :coffee: Java modding at its best.
+![](https://ga-beacon.appspot.com/UA-63411855-1/GitHub/README.md?pixel)
 
 ## The problem with deobfuscation
 All Java deobfuscation tools have one thing in common: They produce **a ton** of errors.
