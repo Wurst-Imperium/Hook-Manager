@@ -51,4 +51,10 @@ public final class Constants
 	{
 		public static final String HTML_DIR = "html/";
 	}
+	
+	public static final class Files
+	{
+		public static final String GA_COOKIE = CURRENT_DIRECTORY
+			+ File.separator + "ga-cookie.json";
+	}
 }
