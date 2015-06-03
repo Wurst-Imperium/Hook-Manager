@@ -1,8 +1,6 @@
 package tk.wurst_client.analytics;
 
-import tk.wurst_client.WurstClient;
 import tk.wurst_client.analytics.JGoogleAnalyticsTracker.GoogleAnalyticsVersion;
-import tk.wurst_client.bot.WurstBot;
 
 public class Analytics
 {
@@ -25,8 +23,7 @@ public class Analytics
 	
 	private boolean shouldTrack()
 	{
-		return WurstClient.INSTANCE.options.google_analytics.enabled
-			&& !WurstBot.isEnabled();
+		return AnalyticsCookieManager.getCookie().enabled;
 	}
 	
 	public void trackPageView(String url, String title)

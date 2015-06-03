@@ -2,8 +2,6 @@ package tk.wurst_client.analytics;
 
 import java.security.SecureRandom;
 
-import tk.wurst_client.WurstClient;
-
 public class VisitorData
 {
 	private int visitorId;
@@ -36,9 +34,9 @@ public class VisitorData
 		long timestamplast, int visits)
 	{
 		long now = now();
-		WurstClient.INSTANCE.options.google_analytics.last_launch = now;
-		WurstClient.INSTANCE.options.google_analytics.launches = visits + 1;
-		WurstClient.INSTANCE.fileManager.saveOptions();
+		AnalyticsCookieManager.getCookie().last_launch = now;
+		AnalyticsCookieManager.getCookie().launches = visits + 1;
+		AnalyticsCookieManager.saveCookie();
 		return new VisitorData(visitorId, timestampfirst, timestamplast, now,
 			visits + 1);
 	}
