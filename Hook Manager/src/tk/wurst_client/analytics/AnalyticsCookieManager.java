@@ -7,8 +7,10 @@
  */
 package tk.wurst_client.analytics;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.PrintWriter;
 
 import tk.wurst_client.hooks.util.Constants;
 
@@ -32,12 +34,16 @@ public class AnalyticsCookieManager
 	{
 		try
 		{
-			cookie =
-				gson.fromJson(new FileReader(Constants.Files.GA_COOKIE),
-					AnalyticsCookie.class);
+			BufferedReader load =
+				new BufferedReader(new FileReader(Constants.Files.GA_COOKIE));
+			cookie = gson.fromJson(load, AnalyticsCookie.class);
+			load.close();
 		}catch(Exception e)
 		{
 			cookie = new AnalyticsCookie();
+		}finally
+		{
+			saveCookie();
 		}
 	}
 	
@@ -45,8 +51,10 @@ public class AnalyticsCookieManager
 	{
 		try
 		{
-			new FileWriter(Constants.Files.GA_COOKIE)
-				.write(gson.toJson(cookie));
+			PrintWriter save =
+				new PrintWriter(new FileWriter(Constants.Files.GA_COOKIE));
+			save.println(gson.toJson(cookie));
+			save.close();
 		}catch(Exception e)
 		{
 			e.printStackTrace();
