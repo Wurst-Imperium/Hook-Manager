@@ -25,6 +25,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import tk.wurst_client.analytics.Analytics;
 import tk.wurst_client.hooks.injector.JarHookInjector;
 import tk.wurst_client.hooks.reader.JarDataReader;
 import tk.wurst_client.hooks.reader.data.ClassData;
@@ -41,6 +42,7 @@ public class MainFrame extends JFrame
 	private HTMLPanel editor;
 	private EditorBridge editorBridge;
 	private File inputFile;
+	private Analytics analytics;
 	
 	/**
 	 * Launch the application.
@@ -83,6 +85,8 @@ public class MainFrame extends JFrame
 	 */
 	public MainFrame()
 	{
+		analytics = new Analytics("UA-63411855-2", "client.hook-manager.tk");
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 			MainFrame.class.getResource("/tk/wurst_client/hooks/icon.png")));
 		setMinimumSize(new Dimension(1024, 640));
@@ -337,5 +341,7 @@ public class MainFrame extends JFrame
 			}
 		});
 		splitPane.setRightComponent(editor);
+		
+		analytics.trackPageView("/", "Hook Manager");
 	}
 }
