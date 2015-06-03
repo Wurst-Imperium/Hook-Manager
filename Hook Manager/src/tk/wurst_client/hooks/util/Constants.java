@@ -7,9 +7,30 @@
  */
 package tk.wurst_client.hooks.util;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 public final class Constants
 {
 	public static final String VERSION = "0.2";
+	public static final String CURRENT_DIRECTORY;
+	
+	static
+	{
+		String currentDirectory = null;
+		try
+		{
+			currentDirectory =
+				URLDecoder.decode(Constants.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath(), "UTF-8");
+			currentDirectory = new File(currentDirectory).getAbsolutePath();
+		}catch(UnsupportedEncodingException e)
+		{
+			e.printStackTrace();
+		}
+		CURRENT_DIRECTORY = currentDirectory;
+	}
 	
 	public static final class URLs
 	{
