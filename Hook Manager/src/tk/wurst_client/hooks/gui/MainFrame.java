@@ -25,6 +25,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import tk.wurst_client.analytics.Analytics;
+import tk.wurst_client.analytics.AnalyticsCookieManager;
 import tk.wurst_client.hooks.injector.JarHookInjector;
 import tk.wurst_client.hooks.reader.JarDataReader;
 import tk.wurst_client.hooks.reader.data.ClassData;
@@ -41,6 +43,7 @@ public class MainFrame extends JFrame
 	private HTMLPanel editor;
 	private EditorBridge editorBridge;
 	private File inputFile;
+	private Analytics analytics;
 	
 	/**
 	 * Launch the application.
@@ -83,6 +86,8 @@ public class MainFrame extends JFrame
 	 */
 	public MainFrame()
 	{
+		analytics = new Analytics("UA-63411855-2", "client.hook-manager.tk");
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 			MainFrame.class.getResource("/tk/wurst_client/hooks/icon.png")));
 		setMinimumSize(new Dimension(1024, 640));
@@ -174,6 +179,46 @@ public class MainFrame extends JFrame
 			}
 		});
 		mnFile.add(mntmExit);
+		
+		JMenu mnOptions = new JMenu("Options");
+		menuBar.add(mnOptions);
+		
+		JMenu mnGoogleAnalytics = new JMenu("Google Analytics");
+		mnOptions.add(mnGoogleAnalytics);
+		
+		JCheckBoxMenuItem chckbxmntmEnabled =
+			new JCheckBoxMenuItem("Enabled",
+				AnalyticsCookieManager.getCookie().enabled);
+		chckbxmntmEnabled.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if(chckbxmntmEnabled.isSelected())
+				{
+					AnalyticsCookieManager.getCookie().enabled = true;
+					analytics.trackEvent("analytics", "enable");
+				}else
+				{
+					analytics.trackEvent("analytics", "disable");
+					AnalyticsCookieManager.getCookie().enabled = false;
+				}
+				AnalyticsCookieManager.saveCookie();
+			}
+		});
+		mnGoogleAnalytics.add(chckbxmntmEnabled);
+		
+		JMenuItem mntmPrivacyPolicy = new JMenuItem("Privacy Policy");
+		mntmPrivacyPolicy.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				analytics.trackEvent("analytics", "view privacy policy");
+				Util.openInBrowser("https://www.google.com/policies/privacy/");
+			}
+		});
+		mnGoogleAnalytics.add(mntmPrivacyPolicy);
 		
 		JMenu mnHelp = new JMenu("Help");
 		menuBar.add(mnHelp);
@@ -337,5 +382,7 @@ public class MainFrame extends JFrame
 			}
 		});
 		splitPane.setRightComponent(editor);
+		
+		analytics.trackPageView("/", "Hook Manager");
 	}
 }
