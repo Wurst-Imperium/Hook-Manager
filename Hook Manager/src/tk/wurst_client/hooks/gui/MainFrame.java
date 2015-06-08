@@ -157,14 +157,14 @@ public class MainFrame extends JFrame
 		});
 		mnFile.add(mntmSaveHookedJar);
 		
-		// JSeparator separator_1 = new JSeparator();
-		// mnFile.add(separator_1);
-		//
-		// JMenuItem mntmLoadSettings = new JMenuItem("Load Settings...");
-		// mnFile.add(mntmLoadSettings);
-		//
-		// JMenuItem mntmSaveSettings = new JMenuItem("Save Settings...");
-		// mnFile.add(mntmSaveSettings);
+		JSeparator separator_1 = new JSeparator();
+		mnFile.add(separator_1);
+		
+		JMenuItem mntmLoadSettings = new JMenuItem("Load Settings...");
+		mnFile.add(mntmLoadSettings);
+		
+		JMenuItem mntmSaveSettings = new JMenuItem("Save Settings...");
+		mnFile.add(mntmSaveSettings);
 		
 		JSeparator separator = new JSeparator();
 		mnFile.add(separator);
