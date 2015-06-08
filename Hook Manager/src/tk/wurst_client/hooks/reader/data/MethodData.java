@@ -54,13 +54,15 @@ public class MethodData
 	public JsonObject toJson()
 	{
 		JsonObject json = new JsonObject();
+		JsonObject jsonHooks = new JsonObject();
 		Iterator<Entry<HookPosition, HookData>> itr =
 			hooks.entrySet().iterator();
 		while(itr.hasNext())
 		{
 			Entry<HookPosition, HookData> entry = itr.next();
-			json.add(entry.getKey().name(), entry.getValue().toJson());
+			jsonHooks.add(entry.getKey().name(), entry.getValue().toJson());
 		}
+		json.add("hooks", jsonHooks);
 		return json;
 	}
 }
