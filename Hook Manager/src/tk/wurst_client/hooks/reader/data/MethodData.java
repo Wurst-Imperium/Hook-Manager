@@ -8,6 +8,10 @@
 package tk.wurst_client.hooks.reader.data;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
+import com.google.gson.JsonObject;
 
 public class MethodData
 {
@@ -19,7 +23,7 @@ public class MethodData
 	{
 		this.parent = parent;
 	}
-
+	
 	public HookData getHook(HookPosition pos)
 	{
 		return hooks.get(pos);
@@ -36,14 +40,29 @@ public class MethodData
 		parent.removeHook();
 		return hooks.remove(pos);
 	}
-
+	
 	public boolean hasHooks()
 	{
 		return !hooks.isEmpty();
 	}
-
+	
 	public boolean hasHookAt(HookPosition pos)
 	{
 		return hooks.containsKey(pos);
+	}
+	
+	public JsonObject toJson()
+	{
+		JsonObject json = new JsonObject();
+		JsonObject jsonHooks = new JsonObject();
+		Iterator<Entry<HookPosition, HookData>> itr =
+			hooks.entrySet().iterator();
+		while(itr.hasNext())
+		{
+			Entry<HookPosition, HookData> entry = itr.next();
+			jsonHooks.add(entry.getKey().name(), entry.getValue().toJson());
+		}
+		json.add("hooks", jsonHooks);
+		return json;
 	}
 }

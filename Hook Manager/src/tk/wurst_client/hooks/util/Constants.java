@@ -15,6 +15,7 @@ public final class Constants
 {
 	public static final String VERSION = "0.2";
 	public static final String CURRENT_DIRECTORY;
+	public static final String HMS_VERSION = "1.0";
 	
 	static
 	{

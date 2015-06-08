@@ -37,13 +37,17 @@ import tk.wurst_client.update.Updater;
 
 public class MainFrame extends JFrame
 {
-	private JTree tree;
-	private JarDataReader jarDataReader;
-	private JarData settings;
 	private HTMLPanel editor;
 	private EditorBridge editorBridge;
+	private JTree tree;
+	
 	private File inputFile;
+	private File settingsFile;
+	
 	private Analytics analytics;
+	private JarDataReader jarDataReader;
+	private JarData settings;
+	private JMenuItem mntmSaveSettingsAs;
 	
 	/**
 	 * Launch the application.
@@ -157,14 +161,53 @@ public class MainFrame extends JFrame
 		});
 		mnFile.add(mntmSaveHookedJar);
 		
-		// JSeparator separator_1 = new JSeparator();
-		// mnFile.add(separator_1);
-		//
-		// JMenuItem mntmLoadSettings = new JMenuItem("Load Settings...");
-		// mnFile.add(mntmLoadSettings);
-		//
-		// JMenuItem mntmSaveSettings = new JMenuItem("Save Settings...");
-		// mnFile.add(mntmSaveSettings);
+		JSeparator separator_1 = new JSeparator();
+		mnFile.add(separator_1);
+		
+		JMenuItem mntmLoadSettings = new JMenuItem("Load Settings...");
+		mnFile.add(mntmLoadSettings);
+		
+		JMenuItem mntmSaveSettings = new JMenuItem("Save Settings");
+		mntmSaveSettings.setMnemonic(KeyEvent.VK_S);
+		mntmSaveSettings.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+			InputEvent.CTRL_MASK));
+		mntmSaveSettings.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if(settingsFile != null)
+					settings.save(settingsFile);
+				else
+					mntmSaveSettingsAs.doClick();
+			}
+		});
+		mnFile.add(mntmSaveSettings);
+		
+		mntmSaveSettingsAs = new JMenuItem("Save Settings As...");
+		mntmSaveSettingsAs.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				JFileChooser fileChooser = new JFileChooser(".");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				fileChooser.setFileFilter(new FileNameExtensionFilter(
+					"Hook Manager settings files", "hms"));
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
+				{
+					String path = fileChooser.getSelectedFile().getPath();
+					if(!path.endsWith(".hms"))
+						path += ".hms";
+					settingsFile = new File(path);
+					settings.save(settingsFile);
+				}
+			}
+		});
+		mntmSaveSettingsAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+			InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		mnFile.add(mntmSaveSettingsAs);
 		
 		JSeparator separator = new JSeparator();
 		mnFile.add(separator);
