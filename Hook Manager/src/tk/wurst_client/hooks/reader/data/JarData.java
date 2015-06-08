@@ -8,7 +8,16 @@
 package tk.wurst_client.hooks.reader.data;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
+import tk.wurst_client.hooks.util.Constants;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 public class JarData
 {
@@ -31,6 +40,24 @@ public class JarData
 	
 	public void save(File file)
 	{
-		// TODO
+		JsonObject json = new JsonObject();
+		json.addProperty("version", Constants.HMS_VERSION);
+		JsonObject jsonClasses = new JsonObject();
+		Iterator<Entry<String, ClassData>> itr = classes.entrySet().iterator();
+		while(itr.hasNext())
+		{
+			Entry<String, ClassData> entry = itr.next();
+			if(entry.getValue().hasHooks())
+				jsonClasses.add(entry.getKey(), entry.getValue().toJson());
+		}
+		json.add("classes", jsonClasses);
+		try(FileOutputStream output = new FileOutputStream(file))
+		{
+			output.write(new GsonBuilder().setPrettyPrinting().create()
+				.toJson(json).getBytes("UTF-8"));
+		}catch(IOException e1)
+		{
+			e1.printStackTrace();
+		}
 	}
 }
