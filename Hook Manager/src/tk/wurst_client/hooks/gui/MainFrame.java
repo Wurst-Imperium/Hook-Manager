@@ -164,6 +164,9 @@ public class MainFrame extends JFrame
 		mnFile.add(mntmLoadSettings);
 		
 		JMenuItem mntmSaveSettings = new JMenuItem("Save Settings...");
+		mntmSaveSettings.setMnemonic(KeyEvent.VK_S);
+		mntmSaveSettings.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+			InputEvent.CTRL_MASK));
 		mntmSaveSettings.addActionListener(new ActionListener()
 		{
 			@Override
