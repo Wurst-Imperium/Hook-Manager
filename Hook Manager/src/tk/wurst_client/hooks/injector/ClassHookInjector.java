@@ -31,6 +31,9 @@ public class ClassHookInjector extends ClassVisitor
 	public void visit(int version, int access, String name, String signature,
 		String superName, String[] interfaces)
 	{
+		access =
+			access & ~Opcodes.ACC_PRIVATE & ~Opcodes.ACC_PROTECTED
+				| Opcodes.ACC_PUBLIC;
 		super.visit(version, access, name, signature, superName, interfaces);
 		className = name;
 	}
