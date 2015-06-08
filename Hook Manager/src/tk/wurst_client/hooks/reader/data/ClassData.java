@@ -58,13 +58,15 @@ public class ClassData
 	public JsonObject toJson()
 	{
 		JsonObject json = new JsonObject();
+		JsonObject jsonMethods = new JsonObject();
 		Iterator<Entry<String, MethodData>> itr = methods.entrySet().iterator();
 		while(itr.hasNext())
 		{
 			Entry<String, MethodData> entry = itr.next();
 			if(entry.getValue().hasHooks())
-				json.add(entry.getKey(), entry.getValue().toJson());
+				jsonMethods.add(entry.getKey(), entry.getValue().toJson());
 		}
+		json.add("methods", jsonMethods);
 		return json;
 	}
 }
