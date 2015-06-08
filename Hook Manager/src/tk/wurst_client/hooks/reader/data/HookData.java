@@ -7,6 +7,8 @@
  */
 package tk.wurst_client.hooks.reader.data;
 
+import com.google.gson.JsonObject;
+
 public class HookData
 {
 	// TODO: Option for collecting only some parameters
@@ -16,7 +18,7 @@ public class HookData
 	{
 		this(false);
 	}
-
+	
 	public HookData(boolean collectParams)
 	{
 		this.collectParams = collectParams;
@@ -30,5 +32,12 @@ public class HookData
 	public void setCollectParams(boolean collectParams)
 	{
 		this.collectParams = collectParams;
+	}
+	
+	public JsonObject toJson()
+	{
+		JsonObject json = new JsonObject();
+		json.addProperty("collectsParams", collectParams);
+		return json;
 	}
 }
