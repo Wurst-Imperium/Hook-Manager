@@ -37,13 +37,17 @@ import tk.wurst_client.update.Updater;
 
 public class MainFrame extends JFrame
 {
-	private JTree tree;
-	private JarDataReader jarDataReader;
-	private JarData settings;
 	private HTMLPanel editor;
 	private EditorBridge editorBridge;
+	private JTree tree;
+	
 	private File inputFile;
+	private File settingsFile;
+	
 	private Analytics analytics;
+	private JarDataReader jarDataReader;
+	private JarData settings;
+	private JMenuItem mntmSaveSettingsAs;
 	
 	/**
 	 * Launch the application.
@@ -163,11 +167,25 @@ public class MainFrame extends JFrame
 		JMenuItem mntmLoadSettings = new JMenuItem("Load Settings...");
 		mnFile.add(mntmLoadSettings);
 		
-		JMenuItem mntmSaveSettings = new JMenuItem("Save Settings...");
+		JMenuItem mntmSaveSettings = new JMenuItem("Save Settings");
 		mntmSaveSettings.setMnemonic(KeyEvent.VK_S);
 		mntmSaveSettings.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 			InputEvent.CTRL_MASK));
 		mntmSaveSettings.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if(settingsFile != null)
+					settings.save(settingsFile);
+				else
+					mntmSaveSettingsAs.doClick();
+			}
+		});
+		mnFile.add(mntmSaveSettings);
+		
+		mntmSaveSettingsAs = new JMenuItem("Save Settings As...");
+		mntmSaveSettingsAs.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -182,11 +200,14 @@ public class MainFrame extends JFrame
 					String path = fileChooser.getSelectedFile().getPath();
 					if(!path.endsWith(".hms"))
 						path += ".hms";
-					settings.save(new File(path));
+					settingsFile = new File(path);
+					settings.save(settingsFile);
 				}
 			}
 		});
-		mnFile.add(mntmSaveSettings);
+		mntmSaveSettingsAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+			InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		mnFile.add(mntmSaveSettingsAs);
 		
 		JSeparator separator = new JSeparator();
 		mnFile.add(separator);
