@@ -7,6 +7,7 @@
  */
 package tk.wurst_client.hooks.reader.data;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class JarData
@@ -26,5 +27,10 @@ public class JarData
 	public ClassData removeClass(String path)
 	{
 		return classes.remove(path);
+	}
+	
+	public void save(File file)
+	{
+		// TODO
 	}
 }

@@ -164,6 +164,25 @@ public class MainFrame extends JFrame
 		mnFile.add(mntmLoadSettings);
 		
 		JMenuItem mntmSaveSettings = new JMenuItem("Save Settings...");
+		mntmSaveSettings.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				JFileChooser fileChooser = new JFileChooser(".");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				fileChooser.setFileFilter(new FileNameExtensionFilter(
+					"Hook Manager settings files", "hms"));
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION)
+				{
+					String path = fileChooser.getSelectedFile().getPath();
+					if(!path.endsWith(".hms"))
+						path += ".hms";
+					settings.save(new File(path));
+				}
+			}
+		});
 		mnFile.add(mntmSaveSettings);
 		
 		JSeparator separator = new JSeparator();
