@@ -8,6 +8,7 @@
 package tk.wurst_client.hooks.injector;
 
 import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -32,6 +33,16 @@ public class ClassHookInjector extends ClassVisitor
 	{
 		super.visit(version, access, name, signature, superName, interfaces);
 		className = name;
+	}
+	
+	@Override
+	public FieldVisitor visitField(int access, String name, String desc,
+		String signature, Object value)
+	{
+		access =
+			access & ~Opcodes.ACC_PRIVATE & ~Opcodes.ACC_PROTECTED
+				| Opcodes.ACC_PUBLIC;
+		return super.visitField(access, name, desc, signature, value);
 	}
 	
 	@Override
