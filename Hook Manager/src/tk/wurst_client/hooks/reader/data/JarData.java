@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import tk.wurst_client.hooks.util.Constants;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -71,6 +72,48 @@ public class JarData
 		{
 			// TODO: Show error message
 			return;
+		}
+		JsonObject jsonClasses = json.get("classes").getAsJsonObject();
+		Iterator<Entry<String, JsonElement>> classItr =
+			jsonClasses.entrySet().iterator();
+		while(classItr.hasNext())
+		{
+			Entry<String, JsonElement> classEntry = classItr.next();
+			if(!classes.containsKey(classEntry.getKey()))
+				throw new IOException("Unknown class: " + classEntry.getKey());
+			ClassData classData = classes.get(classEntry.getKey());
+			JsonObject jsonMethods =
+				classEntry.getValue().getAsJsonObject()
+					.getAsJsonObject("methods");
+			Iterator<Entry<String, JsonElement>> methodItr =
+				jsonMethods.entrySet().iterator();
+			while(methodItr.hasNext())
+			{
+				Entry<String, JsonElement> methodEntry = methodItr.next();
+				if(!classData.hasMethod(methodEntry.getKey()))
+					throw new IOException("Unknown method: "
+						+ methodEntry.getKey());
+				MethodData methodData =
+					classData.getMethod(methodEntry.getKey());
+				JsonObject jsonHooks =
+					methodEntry.getValue().getAsJsonObject()
+						.getAsJsonObject("hooks");
+				Iterator<Entry<String, JsonElement>> hookItr =
+					jsonHooks.entrySet().iterator();
+				while(hookItr.hasNext())
+				{
+					Entry<String, JsonElement> hookEntry = hookItr.next();
+					if(HookPosition.valueOf(hookEntry.getKey()) == null)
+						throw new IOException("Unknown hook position: "
+							+ hookEntry.getKey());
+					HookData hookData =
+						new HookData(hookEntry.getValue().getAsJsonObject()
+							.get("collectsParams").getAsBoolean());
+					methodData.addHook(
+						HookPosition.valueOf(hookEntry.getKey()), hookData);
+				}
+			}
+			
 		}
 	}
 	
