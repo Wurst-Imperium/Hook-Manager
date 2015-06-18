@@ -165,6 +165,28 @@ public class MainFrame extends JFrame
 		mnFile.add(separator_1);
 		
 		JMenuItem mntmLoadSettings = new JMenuItem("Load Settings...");
+		mntmLoadSettings.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				JFileChooser fileChooser = new JFileChooser(".");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				fileChooser.setFileFilter(new FileNameExtensionFilter(
+					"Hook Manager settings files", "hms"));
+				fileChooser.setAcceptAllFileFilterUsed(false);
+				if(fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION)
+					try
+					{
+						settingsFile = fileChooser.getSelectedFile();
+						settings.load(settingsFile);
+						editorBridge.showSelectClassMessage();
+					}catch(IOException e1)
+					{
+						e1.printStackTrace();
+					}
+			}
+		});
 		mnFile.add(mntmLoadSettings);
 		
 		JMenuItem mntmSaveSettings = new JMenuItem("Save Settings");

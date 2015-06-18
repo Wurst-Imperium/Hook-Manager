@@ -9,6 +9,7 @@ package tk.wurst_client.hooks.reader.data;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,7 +18,9 @@ import java.util.Map.Entry;
 import tk.wurst_client.hooks.util.Constants;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class JarData
 {
@@ -59,5 +62,11 @@ public class JarData
 		{
 			e1.printStackTrace();
 		}
+	}
+	
+	public void load(File file) throws IOException
+	{
+		JsonElement json = new JsonParser().parse(new FileReader(file));
+		// TODO
 	}
 }
