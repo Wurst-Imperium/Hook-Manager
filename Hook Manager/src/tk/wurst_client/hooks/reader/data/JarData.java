@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 import tk.wurst_client.hooks.util.Constants;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -66,7 +65,30 @@ public class JarData
 	
 	public void load(File file) throws IOException
 	{
-		JsonElement json = new JsonParser().parse(new FileReader(file));
-		// TODO
+		JsonObject json =
+			new JsonParser().parse(new FileReader(file)).getAsJsonObject();
+		if(!isFileCompatible(json.get("version").getAsString().split("\\.")))
+		{
+			// TODO: Show error message
+			return;
+		}
+	}
+	
+	private boolean isFileCompatible(String[] fileVersion)
+	{
+		String[] hmsVersion = Constants.HMS_VERSION.split("\\.");
+		int length = Math.max(hmsVersion.length, fileVersion.length);
+		for(int i = 0; i < length; i++)
+		{
+			int hmsPart =
+				i < hmsVersion.length ? Integer.parseInt(hmsVersion[i]) : 0;
+			int filePart =
+				i < fileVersion.length ? Integer.parseInt(fileVersion[i]) : 0;
+			if(hmsPart < filePart)
+				return false;
+			if(hmsPart > filePart)
+				return true;
+		}
+		return true;
 	}
 }
