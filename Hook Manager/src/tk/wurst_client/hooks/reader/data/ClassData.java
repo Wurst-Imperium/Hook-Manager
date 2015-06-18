@@ -35,6 +35,11 @@ public class ClassData
 		return methods.remove(name);
 	}
 	
+	public boolean hasMethod(String name)
+	{
+		return methods.containsKey(name);
+	}
+	
 	public Set<String> getMethodNames()
 	{
 		return methods.keySet();
