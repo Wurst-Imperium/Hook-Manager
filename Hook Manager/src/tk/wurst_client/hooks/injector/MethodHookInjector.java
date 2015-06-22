@@ -7,6 +7,7 @@
  */
 package tk.wurst_client.hooks.injector;
 
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -18,6 +19,7 @@ public class MethodHookInjector extends MethodVisitor
 	private String methodName;
 	private String className;
 	private MethodData methodData;
+	private byte paramCount = 0;
 	
 	public MethodHookInjector(int api, MethodVisitor mv, MethodData methodData,
 		String className, String methodName)
@@ -29,16 +31,35 @@ public class MethodHookInjector extends MethodVisitor
 	}
 	
 	@Override
+	public AnnotationVisitor visitParameterAnnotation(int parameter,
+		String desc, boolean visible)
+	{
+		paramCount++;
+		return super.visitParameterAnnotation(parameter, desc, visible);
+	}
+	
+	@Override
 	public void visitCode()
 	{
 		super.visitCode();
 		if(methodData.hasHookAt(HookPosition.METHOD_START))
 		{
 			super.visitLdcInsn(className + "." + methodName + "|start");
+			
+			super.visitInsn(Opcodes.ICONST_4);
+			super.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
+			for(byte i = 0; i < paramCount; i++)
+			{
+				super.visitInsn(Opcodes.DUP);
+				super.visitIntInsn(Opcodes.BIPUSH, i);
+				super.visitVarInsn(Opcodes.ALOAD, i + 1);
+				super.visitInsn(Opcodes.AASTORE);
+			}
+			
 			// TODO: Custom class path
 			super.visitMethodInsn(Opcodes.INVOKESTATIC,
 				"tk/wurst_client/hooks/HookManager", "hook",
-				"(Ljava/lang/String;)V", false);
+				"(Ljava/lang/String;[Ljava/lang/Object;)V", false);
 		}
 	}
 	
