@@ -7,7 +7,6 @@
  */
 package tk.wurst_client.hooks.injector;
 
-import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
@@ -19,7 +18,6 @@ public class MethodHookInjector extends MethodVisitor
 	private String methodName;
 	private String className;
 	private MethodData methodData;
-	private byte paramCount = 0;
 	
 	public MethodHookInjector(int api, MethodVisitor mv, MethodData methodData,
 		String className, String methodName)
@@ -31,20 +29,17 @@ public class MethodHookInjector extends MethodVisitor
 	}
 	
 	@Override
-	public AnnotationVisitor visitParameterAnnotation(int parameter,
-		String desc, boolean visible)
-	{
-		paramCount++;
-		return super.visitParameterAnnotation(parameter, desc, visible);
-	}
-	
-	@Override
 	public void visitCode()
 	{
 		super.visitCode();
 		if(methodData.hasHookAt(HookPosition.METHOD_START))
 		{
 			super.visitLdcInsn(className + "." + methodName + "|start");
+			
+			int paramCount = 0;
+			if(methodName.contains(";"))
+				paramCount = methodName.substring(methodName.indexOf("("),
+					methodName.lastIndexOf(")")).split(";").length;
 			
 			super.visitIntInsn(Opcodes.BIPUSH, paramCount);
 			super.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
