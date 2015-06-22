@@ -59,7 +59,7 @@ public class ClassHookInjector extends ClassVisitor
 			super.visitMethod(access, name, desc, signature, exceptions);
 		if(classData.hasHooks() && classData.getMethod(name + desc).hasHooks())
 			return new MethodHookInjector(api, mv, classData.getMethod(name
-				+ desc), className, name);
+				+ desc), className, name + desc);
 		else
 			return mv;
 	}
