@@ -47,7 +47,7 @@ public class MethodHookInjector extends MethodVisitor
 			{
 				super.visitInsn(Opcodes.DUP);
 				super.visitIntInsn(Opcodes.BIPUSH, i);
-				super.visitVarInsn(Opcodes.ALOAD, i + 1);
+				super.visitVarInsn(Opcodes.ALOAD, i);
 				super.visitInsn(Opcodes.AASTORE);
 			}
 			
