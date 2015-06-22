@@ -46,7 +46,7 @@ public class MethodHookInjector extends MethodVisitor
 		{
 			super.visitLdcInsn(className + "." + methodName + "|start");
 			
-			super.visitInsn(Opcodes.ICONST_4);
+			super.visitIntInsn(Opcodes.BIPUSH, paramCount);
 			super.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
 			for(byte i = 0; i < paramCount; i++)
 			{
