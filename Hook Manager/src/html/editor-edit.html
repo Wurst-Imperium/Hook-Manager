@@ -27,10 +27,14 @@
             			$("#methods").append(template
             				.replace(/{{name}}/g, methodNames[i].toString().replace("<", "&lt;"))
             				.replace(/{{id}}/g, i));
-            			if(java.hasHookAt(methodNames[i], "METHOD_START"))
+            			if(java.hasHookAt(methodNames[i], "METHOD_START")){
             				toggleHookButtons("hook-" + i + "-start", methodNames[i], "METHOD_START");
-            			if(java.hasHookAt(methodNames[i], "METHOD_END"))
+            				toggleParamsButtons("hook-" + i + "-start", methodNames[i], "METHOD_START");
+            			}
+            			if(java.hasHookAt(methodNames[i], "METHOD_END")){
             				toggleHookButtons("hook-" + i + "-end", methodNames[i], "METHOD_END");
+            				toggleParamsButtons("hook-" + i + "-end", methodNames[i], "METHOD_END");
+            			}
             		}
   				});
         	}catch(e){
