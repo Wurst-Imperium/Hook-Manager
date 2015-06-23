@@ -19,6 +19,7 @@ public class MethodHookInjector extends MethodVisitor
 	private String methodName;
 	private String className;
 	private MethodData methodData;
+	private int paramCount;
 	
 	public MethodHookInjector(int api, MethodVisitor mv, MethodData methodData,
 		String className, String methodName)
@@ -27,6 +28,12 @@ public class MethodHookInjector extends MethodVisitor
 		this.methodName = methodName;
 		this.className = className;
 		this.methodData = methodData;
+		
+		paramCount = 0;
+		if(methodName.contains(";"))
+			paramCount =
+				methodName.substring(methodName.indexOf("("),
+					methodName.lastIndexOf(")")).split(";").length;
 	}
 	
 	@Override
@@ -40,12 +47,6 @@ public class MethodHookInjector extends MethodVisitor
 			
 			if(hookData.collectsParams())
 			{
-				int paramCount = 0;
-				if(methodName.contains(";"))
-					paramCount =
-						methodName.substring(methodName.indexOf("("),
-							methodName.lastIndexOf(")")).split(";").length;
-				
 				super.visitIntInsn(Opcodes.BIPUSH, paramCount);
 				super.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
 				for(byte i = 0; i < paramCount; i++)
@@ -77,11 +78,6 @@ public class MethodHookInjector extends MethodVisitor
 			
 			if(hookData.collectsParams())
 			{
-				int paramCount = 0;
-				if(methodName.contains(";"))
-					paramCount =
-						methodName.substring(methodName.indexOf("("),
-							methodName.lastIndexOf(")")).split(";").length;
 				
 				super.visitIntInsn(Opcodes.BIPUSH, paramCount);
 				super.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
