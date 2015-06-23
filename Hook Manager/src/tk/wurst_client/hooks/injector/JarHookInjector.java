@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
@@ -62,8 +63,37 @@ public class JarHookInjector
 				output.write(writer.toByteArray());
 				output.closeEntry();
 			}
-		// TODO: Add HookManager class
-		output.close();
 		input.close();
+		
+		output.putNextEntry(new JarEntry("tk/"));
+		output.closeEntry();
+		output.putNextEntry(new JarEntry("tk/wurst_client/"));
+		output.closeEntry();
+		output.putNextEntry(new JarEntry("tk/wurst_client/hooks/"));
+		output.closeEntry();
+		
+		output.putNextEntry(new JarEntry(
+			"tk/wurst_client/hooks/HookManager.class"));
+		InputStream input2 =
+			getClass().getClassLoader().getResourceAsStream(
+				"tk/wurst_client/hooks/HookManager.class");
+		byte[] buffer = new byte[8192];
+		for(int length; (length = input2.read(buffer)) != -1;)
+			output.write(buffer, 0, length);
+		output.closeEntry();
+		input2.close();
+		
+		output.putNextEntry(new JarEntry(
+			"tk/wurst_client/hooks/HookManager$Hook.class"));
+		input2 =
+			getClass().getClassLoader().getResourceAsStream(
+				"tk/wurst_client/hooks/HookManager$Hook.class");
+		buffer = new byte[8192];
+		for(int length; (length = input2.read(buffer)) != -1;)
+			output.write(buffer, 0, length);
+		output.closeEntry();
+		input2.close();
+		
+		output.close();
 	}
 }
