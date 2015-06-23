@@ -46,6 +46,11 @@
   		toggleHookButtons(id, method, pos);
   	}
   	
+  	function toggleParams(id, method, pos){
+  		//java.toggleParams(method, pos);
+  		toggleParamsButtons(id);
+  	}
+  	
   	function toggleHookButtons(id, method, pos){
   		$("#" + id + " .hook-button, #" + id + " .hook").toggleClass("hidden");
 		var badge = $("#method-" + id.split("-")[1] + " .badge");
@@ -57,6 +62,14 @@
   			if(badge.text() === "0")
   				badge.addClass("hidden");
   		}
+  	}
+  	
+  	function toggleParamsButtons(id){
+  		var button = $("#" + id + " .params-button");
+  		if(button.text() === "Ignore Parameters")
+  			button.text("Collect Parameters");
+  		else
+  			button.text("Ignore Parameters");
   	}
   </script>
 </head>
