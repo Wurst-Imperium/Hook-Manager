@@ -14,7 +14,11 @@
      -->Inject Hook<!--
    --></a><!--
    --><span class="hook hidden"><!--
-     -->HookManager.hook("{{name}}|start");
+     -->HookManager.hook("{{name}}|start"<!--
+       --><span class="params-code hidden"><!--
+         -->, new Object[]{...}<!--
+       --></span><!--
+     -->);
     <!--
      --><a class="btn btn-danger btn-xs" onclick="toggleHook('hook-{{id}}-start', '{{name}}', 'METHOD_START');" style="float: none"><!--
        -->Remove Hook<!--

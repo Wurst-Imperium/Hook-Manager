@@ -71,6 +71,7 @@
   	}
   	
   	function toggleParamsButtons(id){
+		$("#" + id + " .params-code").toggleClass("hidden");
   		var button = $("#" + id + " .params-button");
   		if(button.text() === "Ignore Parameters")
   			button.text("Collect Parameters");
