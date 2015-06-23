@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import javax.swing.JOptionPane;
+
 import tk.wurst_client.hooks.util.Constants;
 
 import com.google.gson.GsonBuilder;
@@ -68,11 +70,7 @@ public class JarData
 	{
 		JsonObject json =
 			new JsonParser().parse(new FileReader(file)).getAsJsonObject();
-		if(!isFileCompatible(json.get("version").getAsString().split("\\.")))
-		{
-			// TODO: Show error message
-			return;
-		}
+		checkCompatibility(json.get("version").getAsString().split("\\."));
 		JsonObject jsonClasses = json.get("classes").getAsJsonObject();
 		Iterator<Entry<String, JsonElement>> classItr =
 			jsonClasses.entrySet().iterator();
@@ -117,21 +115,46 @@ public class JarData
 		}
 	}
 	
-	private boolean isFileCompatible(String[] fileVersion)
+	private void checkCompatibility(String[] fileVersion) throws IOException
 	{
-		String[] hmsVersion = Constants.HMS_VERSION.split("\\.");
-		int length = Math.max(hmsVersion.length, fileVersion.length);
-		for(int i = 0; i < length; i++)
+		for(int i = 0; i < fileVersion.length; i++)
 		{
-			int hmsPart =
-				i < hmsVersion.length ? Integer.parseInt(hmsVersion[i]) : 0;
-			int filePart =
-				i < fileVersion.length ? Integer.parseInt(fileVersion[i]) : 0;
-			if(hmsPart < filePart)
-				return false;
-			if(hmsPart > filePart)
-				return true;
+			try
+			{
+				Integer.parseInt(fileVersion[i]);
+			}catch(NumberFormatException e)
+			{
+				JOptionPane.showMessageDialog(null,
+					"An error occurred while trying to check the version of\n"
+						+ "this HMS file. The file is either broken or\n"
+						+ "incompatible with this Hook Manager version.",
+					"Error", JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+				throw new IOException();
+			}
 		}
-		return true;
+		
+		String[] hmsVersion = Constants.HMS_VERSION.split("\\.");
+		if(!fileVersion[0].equals(hmsVersion[0]))
+		{
+			JOptionPane
+				.showMessageDialog(
+					null,
+					"This HMS file requires "
+						+ (Integer.parseInt(fileVersion[0]) > Integer
+							.parseInt(hmsVersion[0]) ? "a newer" : "an older")
+						+ " Hook Manager\nversion than the one you have installed.",
+					"Incompatible File", JOptionPane.ERROR_MESSAGE);
+			throw new IOException();
+		}
+		
+		if(Integer.parseInt(fileVersion[1]) > Integer.parseInt(hmsVersion[1]))
+		{
+			JOptionPane.showMessageDialog(null,
+				"This HMS file was created with a newer Hook Manager version\n"
+					+ "than the one you have installed. Not all of the\n"
+					+ "features in this file can be applied.",
+				"Partially Incompatible File", JOptionPane.WARNING_MESSAGE);
+		}
 	}
 }
