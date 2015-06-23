@@ -29,11 +29,13 @@
             				.replace(/{{id}}/g, i));
             			if(java.hasHookAt(methodNames[i], "METHOD_START")){
             				toggleHookButtons("hook-" + i + "-start", methodNames[i], "METHOD_START");
-            				toggleParamsButtons("hook-" + i + "-start", methodNames[i], "METHOD_START");
+              				if(java.collectsParams(methodNames[i], "METHOD_START"))
+            					toggleParamsButtons("hook-" + i + "-start", methodNames[i], "METHOD_START");
             			}
             			if(java.hasHookAt(methodNames[i], "METHOD_END")){
             				toggleHookButtons("hook-" + i + "-end", methodNames[i], "METHOD_END");
-            				toggleParamsButtons("hook-" + i + "-end", methodNames[i], "METHOD_END");
+              				if(java.collectsParams(methodNames[i], "METHOD_END"))
+            					toggleParamsButtons("hook-" + i + "-end", methodNames[i], "METHOD_END");
             			}
             		}
   				});
