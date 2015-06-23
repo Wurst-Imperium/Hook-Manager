@@ -7,19 +7,39 @@
  */
 package tk.wurst_client.hooks;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 public class HookManager
 {
+	private static HashMap<String, HashSet<Hook>> hooks = new HashMap<>();
+	
 	public static void hook(String method)
 	{
-		// TODO: manage hooks
-		System.out.println(method);
+		hook(method, null);
 	}
 	
 	public static void hook(String method, Object[] params)
 	{
-		// TODO: manage hooks
-		System.out.println(method);
-		for(int i = 0; i < params.length; i++)
-			System.out.println("- " + params[i].toString());
+		if(hooks.containsKey(method))
+			for(Hook hook : hooks.get(method))
+				hook.hook(params);
+	}
+	
+	public static void addHook(String method, Hook hook)
+	{
+		if(!hooks.containsKey(method))
+			hooks.put(method, new HashSet<>());
+		hooks.get(method).add(hook);
+	}
+	
+	public static void removeHook(String method, Hook hook)
+	{
+		hooks.get(method).remove(hook);
+	}
+	
+	public static interface Hook
+	{
+		public void hook(Object[] params);
 	}
 }
