@@ -27,10 +27,16 @@
             			$("#methods").append(template
             				.replace(/{{name}}/g, methodNames[i].toString().replace("<", "&lt;"))
             				.replace(/{{id}}/g, i));
-            			if(java.hasHookAt(methodNames[i], "METHOD_START"))
+            			if(java.hasHookAt(methodNames[i], "METHOD_START")){
             				toggleHookButtons("hook-" + i + "-start", methodNames[i], "METHOD_START");
-            			if(java.hasHookAt(methodNames[i], "METHOD_END"))
+              				if(java.collectsParams(methodNames[i], "METHOD_START"))
+            					toggleParamsButtons("hook-" + i + "-start", methodNames[i], "METHOD_START");
+            			}
+            			if(java.hasHookAt(methodNames[i], "METHOD_END")){
             				toggleHookButtons("hook-" + i + "-end", methodNames[i], "METHOD_END");
+              				if(java.collectsParams(methodNames[i], "METHOD_END"))
+            					toggleParamsButtons("hook-" + i + "-end", methodNames[i], "METHOD_END");
+            			}
             		}
   				});
         	}catch(e){
@@ -46,6 +52,11 @@
   		toggleHookButtons(id, method, pos);
   	}
   	
+  	function toggleParams(id, method, pos){
+  		java.toggleCollectParams(method, pos);
+  		toggleParamsButtons(id);
+  	}
+  	
   	function toggleHookButtons(id, method, pos){
   		$("#" + id + " .hook-button, #" + id + " .hook").toggleClass("hidden");
 		var badge = $("#method-" + id.split("-")[1] + " .badge");
@@ -57,6 +68,15 @@
   			if(badge.text() === "0")
   				badge.addClass("hidden");
   		}
+  	}
+  	
+  	function toggleParamsButtons(id){
+		$("#" + id + " .params-code").toggleClass("hidden");
+  		var button = $("#" + id + " .params-button");
+  		if(button.text() === "Ignore Parameters")
+  			button.text("Collect Parameters");
+  		else
+  			button.text("Ignore Parameters");
   	}
   </script>
 </head>

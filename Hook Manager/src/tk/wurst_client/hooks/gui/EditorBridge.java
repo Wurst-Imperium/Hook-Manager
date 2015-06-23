@@ -67,6 +67,12 @@ public class EditorBridge
 			HookPosition.valueOf(position));
 	}
 	
+	public boolean collectsParams(String methodName, String position)
+	{
+		return classData.getMethod(methodName).getHook(
+			HookPosition.valueOf(position)).collectsParams();
+	}
+	
 	public void toggleCollectParams(String methodName, String position)
 	{
 		HookData hook =

@@ -8,10 +8,18 @@
 package tk.wurst_client.hooks;
 
 public class HookManager
-{	
+{
 	public static void hook(String method)
 	{
 		// TODO: manage hooks
 		System.out.println(method);
+	}
+	
+	public static void hook(String method, Object[] params)
+	{
+		// TODO: manage hooks
+		System.out.println(method);
+		for(int i = 0; i < params.length; i++)
+			System.out.println("- " + params[i].toString());
 	}
 }

@@ -10,6 +10,7 @@ package tk.wurst_client.hooks.injector;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import tk.wurst_client.hooks.reader.data.HookData;
 import tk.wurst_client.hooks.reader.data.HookPosition;
 import tk.wurst_client.hooks.reader.data.MethodData;
 
@@ -18,6 +19,7 @@ public class MethodHookInjector extends MethodVisitor
 	private String methodName;
 	private String className;
 	private MethodData methodData;
+	private int paramCount;
 	
 	public MethodHookInjector(int api, MethodVisitor mv, MethodData methodData,
 		String className, String methodName)
@@ -26,6 +28,12 @@ public class MethodHookInjector extends MethodVisitor
 		this.methodName = methodName;
 		this.className = className;
 		this.methodData = methodData;
+		
+		paramCount = 0;
+		if(methodName.contains(";"))
+			paramCount =
+				methodName.substring(methodName.indexOf("("),
+					methodName.lastIndexOf(")")).split(";").length;
 	}
 	
 	@Override
@@ -34,36 +42,60 @@ public class MethodHookInjector extends MethodVisitor
 		super.visitCode();
 		if(methodData.hasHookAt(HookPosition.METHOD_START))
 		{
+			HookData hookData = methodData.getHook(HookPosition.METHOD_START);
 			super.visitLdcInsn(className + "." + methodName + "|start");
+			
+			if(hookData.collectsParams())
+			{
+				super.visitIntInsn(Opcodes.BIPUSH, paramCount);
+				super.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
+				for(byte i = 0; i < paramCount; i++)
+				{
+					super.visitInsn(Opcodes.DUP);
+					super.visitIntInsn(Opcodes.BIPUSH, i);
+					super.visitVarInsn(Opcodes.ALOAD, i);
+					super.visitInsn(Opcodes.AASTORE);
+				}
+			}
+			
 			// TODO: Custom class path
 			super.visitMethodInsn(Opcodes.INVOKESTATIC,
 				"tk/wurst_client/hooks/HookManager", "hook",
-				"(Ljava/lang/String;)V", false);
+				"(Ljava/lang/String;"
+					+ (hookData.collectsParams() ? "[Ljava/lang/Object;" : "")
+					+ ")V", false);
 		}
 	}
 	
 	@Override
 	public void visitInsn(int opcode)
 	{
-		if(methodData.hasHookAt(HookPosition.METHOD_END))
+		if(methodData.hasHookAt(HookPosition.METHOD_END) && opcode >= 172
+			&& opcode <= 177)
 		{
-			switch(opcode)
+			HookData hookData = methodData.getHook(HookPosition.METHOD_END);
+			super.visitLdcInsn(className + "." + methodName + "|end");
+			
+			if(hookData.collectsParams())
 			{
-				case Opcodes.ARETURN:
-				case Opcodes.DRETURN:
-				case Opcodes.FRETURN:
-				case Opcodes.IRETURN:
-				case Opcodes.LRETURN:
-				case Opcodes.RETURN:
-					super.visitLdcInsn(className + "." + methodName + "|end");
-					// TODO: Custom class path
-					super.visitMethodInsn(Opcodes.INVOKESTATIC,
-						"tk/wurst_client/hooks/HookManager", "hook",
-						"(Ljava/lang/String;)V", false);
-					break;
-				default:
-					break;
+				
+				super.visitIntInsn(Opcodes.BIPUSH, paramCount);
+				super.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
+				for(byte i = 0; i < paramCount; i++)
+				{
+					super.visitInsn(Opcodes.DUP);
+					super.visitIntInsn(Opcodes.BIPUSH, i);
+					super.visitVarInsn(Opcodes.ALOAD, i);
+					super.visitInsn(Opcodes.AASTORE);
+				}
 			}
+			
+			// TODO: Custom class path
+			super.visitMethodInsn(Opcodes.INVOKESTATIC,
+				"tk/wurst_client/hooks/HookManager", "hook",
+				"(Ljava/lang/String;"
+					+ (hookData.collectsParams() ? "[Ljava/lang/Object;" : "")
+					+ ")V", false);
 		}
 		super.visitInsn(opcode);
 	}
