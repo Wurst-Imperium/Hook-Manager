@@ -69,25 +69,14 @@ public class MethodHookInjector extends MethodVisitor
 	@Override
 	public void visitInsn(int opcode)
 	{
-		if(methodData.hasHookAt(HookPosition.METHOD_END))
+		if(methodData.hasHookAt(HookPosition.METHOD_END) && opcode >= 172
+			&& opcode <= 177)
 		{
-			switch(opcode)
-			{
-				case Opcodes.ARETURN:
-				case Opcodes.DRETURN:
-				case Opcodes.FRETURN:
-				case Opcodes.IRETURN:
-				case Opcodes.LRETURN:
-				case Opcodes.RETURN:
-					super.visitLdcInsn(className + "." + methodName + "|end");
-					// TODO: Custom class path
-					super.visitMethodInsn(Opcodes.INVOKESTATIC,
-						"tk/wurst_client/hooks/HookManager", "hook",
-						"(Ljava/lang/String;)V", false);
-					break;
-				default:
-					break;
-			}
+			super.visitLdcInsn(className + "." + methodName + "|end");
+			// TODO: Custom class path
+			super.visitMethodInsn(Opcodes.INVOKESTATIC,
+				"tk/wurst_client/hooks/HookManager", "hook",
+				"(Ljava/lang/String;)V", false);
 		}
 		super.visitInsn(opcode);
 	}
