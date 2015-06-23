@@ -72,11 +72,34 @@ public class MethodHookInjector extends MethodVisitor
 		if(methodData.hasHookAt(HookPosition.METHOD_END) && opcode >= 172
 			&& opcode <= 177)
 		{
+			HookData hookData = methodData.getHook(HookPosition.METHOD_END);
 			super.visitLdcInsn(className + "." + methodName + "|end");
+			
+			if(hookData.collectsParams())
+			{
+				int paramCount = 0;
+				if(methodName.contains(";"))
+					paramCount =
+						methodName.substring(methodName.indexOf("("),
+							methodName.lastIndexOf(")")).split(";").length;
+				
+				super.visitIntInsn(Opcodes.BIPUSH, paramCount);
+				super.visitTypeInsn(Opcodes.ANEWARRAY, "java/lang/Object");
+				for(byte i = 0; i < paramCount; i++)
+				{
+					super.visitInsn(Opcodes.DUP);
+					super.visitIntInsn(Opcodes.BIPUSH, i);
+					super.visitVarInsn(Opcodes.ALOAD, i);
+					super.visitInsn(Opcodes.AASTORE);
+				}
+			}
+			
 			// TODO: Custom class path
 			super.visitMethodInsn(Opcodes.INVOKESTATIC,
 				"tk/wurst_client/hooks/HookManager", "hook",
-				"(Ljava/lang/String;)V", false);
+				"(Ljava/lang/String;"
+					+ (hookData.collectsParams() ? "[Ljava/lang/Object;" : "")
+					+ ")V", false);
 		}
 		super.visitInsn(opcode);
 	}
