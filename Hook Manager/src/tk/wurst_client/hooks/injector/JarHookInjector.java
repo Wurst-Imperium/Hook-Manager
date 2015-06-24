@@ -44,6 +44,8 @@ public class JarHookInjector
 				output.closeEntry();
 			}else if(!entry.getName().endsWith(".class"))
 			{
+				if(entry.getName().equals("META-INF/MANIFEST.MF"))
+					continue;
 				output.putNextEntry(entry);
 				byte[] buffer = new byte[8192];
 				for(int length; (length = input.read(buffer)) != -1;)
